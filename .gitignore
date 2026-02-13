@@ -11,6 +11,9 @@ build/
 # env
 .env
 
+# 弹幕分析等工具产出的结构化结果（供向量库等使用）
+output/
+
 # IDE
 .idea/
 .vscode/

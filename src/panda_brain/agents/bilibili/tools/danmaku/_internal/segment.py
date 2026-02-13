@@ -33,7 +33,8 @@ def select_boundaries(
             selected.append(idx)
 
     # ── 阶段 2+3：处理超长段 ──
-    for _ in range(20):
+    max_iter = max(20, duration // max_seg_sec * 2)
+    for _ in range(max_iter):
         selected_sorted = sorted(selected)
         cuts = [0] + [positions[i] for i in selected_sorted] + [duration]
         long_seg = None
@@ -44,7 +45,8 @@ def select_boundaries(
         if long_seg is None:
             break
         s, e = long_seg
-        margin = min_seg_sec
+        # margin 自适应：不超过段落长度的 1/3，确保搜索区间够大
+        margin = min(min_seg_sec, (e - s) // 3)
 
         # 阶段 2：尝试密度低点
         best = None
