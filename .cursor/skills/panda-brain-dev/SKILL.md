@@ -112,6 +112,12 @@ async def delegate_to_xxx(ctx: RunContext[Deps], task: str) -> str:
 - 路由决策靠委托函数的 **docstring** 驱动，新增 agent 不需要改 orchestrator 的 prompt
 - 各子 agent 的 system prompt 自行定义行为细节（如"主动调用所有工具"）
 
+### 测试约定
+
+- **每个智能体在自身目录下创建 `tests/`**，只测试该智能体自己的工具与逻辑（不测编排、不测其他 agent）。
+- 测试文件命名：`test_*.py`，可用标准库 `unittest` 或 `pytest`。
+- 运行示例：`PYTHONPATH=src python -m unittest panda_brain.agents.xxx.tests.test_yyy`。
+
 ### 不做的事
 
 - 不再新增全局 deps 之外的 `factory.py`、`shared/` — 有需求时再议

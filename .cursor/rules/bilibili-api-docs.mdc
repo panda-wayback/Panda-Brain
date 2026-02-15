@@ -1,0 +1,19 @@
+---
+description: 使用 B 站 API 时先查阅 bilibili-api 文档
+globs: **/bilibili_fetcher/**
+alwaysApply: false
+---
+
+# B 站 API 开发前必读
+
+在使用 B 站（Bilibili）API 时，请按以下流程进行：
+
+## 1. 先查文档再写代码
+
+- 查阅 **bilibili-api** 的文档（如 [bilibili-api 文档 / GitHub](https://github.com/Nemo2011/bilibili-api)），确认接口参数、返回值与调用方式。
+- 通过 Context7、Linkup 等工具检索当前用法与示例后再实现。
+
+## 2. 实现时
+
+- 以 bilibili-api 文档中的 API 约定和示例为准，避免凭猜测写参数或解析响应。
+- 涉及认证、限流、错误码时，以文档说明为准。

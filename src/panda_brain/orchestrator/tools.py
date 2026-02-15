@@ -1,6 +1,7 @@
 from pydantic_ai import RunContext
 
 from panda_brain.agents.bilibili import bilibili_agent
+from panda_brain.agents.bilibili_fetcher import bilibili_fetcher_agent
 from panda_brain.agents.coder import coder_agent
 from panda_brain.agents.network import network_agent
 from panda_brain.deps import Deps
@@ -89,4 +90,11 @@ async def delegate_to_network(ctx: RunContext[Deps], task: str) -> str:
 async def delegate_to_bilibili(ctx: RunContext[Deps], task: str) -> str:
     """将 B 站相关任务（番剧查询、播放链接获取等）委托给 B 站专家 Agent。"""
     result = await bilibili_agent.run(task, deps=ctx.deps, usage=ctx.usage)
+    return result.output
+
+
+@orchestrator.tool
+async def delegate_to_bilibili_fetcher(ctx: RunContext[Deps], task: str) -> str:
+    """将 B 站数据抓取任务（按番剧名查找动漫、抓取弹幕并写入 LanceDB，避免重复抓取）委托给抓取专家 Agent。"""
+    result = await bilibili_fetcher_agent.run(task, deps=ctx.deps, usage=ctx.usage)
     return result.output
