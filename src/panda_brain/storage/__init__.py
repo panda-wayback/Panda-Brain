@@ -6,6 +6,7 @@ from panda_brain.storage.lancedb_store import (
     get_db,
     list_tables,
     search,
+    table_has_source,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "add_documents",
     "search",
     "list_tables",
+    "table_has_source",
 ]

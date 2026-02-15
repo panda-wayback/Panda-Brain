@@ -53,7 +53,7 @@ def _get_document_schema() -> type[LanceModel]:
 def ensure_table(table_name: str):
     """若表不存在则用默认 schema 创建，存在则直接打开。返回表对象。"""
     db = get_db()
-    names = db.table_names()
+    names = db.list_tables()
     if table_name in names:
         return db.open_table(table_name)
     schema = _get_document_schema()
@@ -100,4 +100,17 @@ def search(
 
 def list_tables() -> list[str]:
     """列出当前库下所有表名。"""
-    return get_db().table_names()
+    return get_db().list_tables()
+
+
+def table_has_source(table_name: str, source: str) -> bool:
+    """当前库中该表是否已有至少一条 source 等于给定值的行（表不存在视为无）。"""
+    db = get_db()
+    if table_name not in db.list_tables():
+        return False
+    try:
+        table = db.open_table(table_name)
+        rows = table.search().where(f"source = '{source}'").limit(1).to_list()
+        return len(rows) > 0
+    except Exception:
+        return False

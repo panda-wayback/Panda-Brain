@@ -8,12 +8,10 @@ class Settings(BaseSettings):
 
     ollama_base_url: str = "http://localhost:11434/v1"
     default_model: str = "qwen3:latest"
-    # LanceDB 数据目录（与 bilibili 登记表 .panda_brain/ 可同迁到一目录时再统一）
-    lancedb_path: str = ".lancedb"
+    # LanceDB 数据目录（与 bilibili 登记表统一放在 .panda_brain/ 下）
+    lancedb_path: str = ".panda_brain/lancedb"
     # 向量化模型（sentence-transformers 模型名）
     lancedb_embedding_model: str = "BAAI/bge-small-en-v1.5"
-    # B 站抓取已拉取记录（避免重复抓取）
-    bilibili_fetched_registry_path: str = ".panda_brain/bilibili_fetched.json"
 
 
 settings = Settings()

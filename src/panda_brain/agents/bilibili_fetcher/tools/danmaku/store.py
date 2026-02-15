@@ -12,7 +12,6 @@ import httpx
 from bilibili_api import video
 from bilibili_api.exceptions import DanmakuClosedException
 
-from panda_brain.agents.bilibili_fetcher.registry import is_fetched, mark_fetched
 from panda_brain.agents.bilibili_fetcher.tools._common import (
     TABLE_DANMAKU,
     DANMAKU_TEXT_MAX,
@@ -62,16 +61,13 @@ async def fetch_danmaku_and_store(
     - 存储：每秒一行；text 为该秒弹幕合并文本（或 LLM 一句话概括），extra 含 time_sec、danmaku_count。
     - limit：参与聚合的弹幕总条数上限，0 表示不截断。
     - summarize_with_llm：是否用 Ollama 对该秒弹幕做一句话概括（语义聚合）；否则仅合并文本。"""
-    if is_fetched(bvid, "danmaku"):
-        # 若当前库中并无该 bvid 数据（如存储路径已切换），仍重新抓取并写入
-        if deps.lancedb.table_has_source(TABLE_DANMAKU, bvid):
-            return 0, "已存在，跳过"
+    if deps.lancedb.table_has_source(TABLE_DANMAKU, bvid):
+        return 0, "已存在，跳过"
     try:
         v = video.Video(bvid=bvid)
         danmakus = await v.get_danmakus(page_index=0, from_seg=0, to_seg=None)
         if not danmakus:
-            mark_fetched(bvid, "danmaku")
-            return 0, "无弹幕，已标记避免重复请求"
+            return 0, "无弹幕"
 
         # 按秒分组： time_sec -> [弹幕文本, ...]
         to_take = danmakus if limit <= 0 else danmakus[:limit]
@@ -83,7 +79,6 @@ async def fetch_danmaku_and_store(
             by_sec[int(dm.dm_time)].append(text)
 
         if not by_sec:
-            mark_fetched(bvid, "danmaku")
             return 0, "无有效弹幕"
 
         # 每秒一行：合并该秒弹幕（或 LLM 概括），extra 带 time_sec、danmaku_count
@@ -103,10 +98,8 @@ async def fetch_danmaku_and_store(
             })
 
         n = deps.lancedb.add_documents(TABLE_DANMAKU, items)
-        mark_fetched(bvid, "danmaku")
         return n, f"已按秒聚合写入 {n} 条（共 {sum(len(by_sec[s]) for s in by_sec)} 条原始弹幕）"
     except DanmakuClosedException:
-        mark_fetched(bvid, "danmaku")
         return 0, "该视频弹幕已关闭"
     except Exception as e:
         return 0, f"抓取失败: {e}"
