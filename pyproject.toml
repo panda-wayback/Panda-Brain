@@ -6,6 +6,8 @@ requires-python = ">=3.11"
 dependencies = [
     "pydantic-ai",
     "pydantic-settings",
+    "lancedb>=0.14.0",
+    "sentence-transformers>=3.0.0",
 ]
 
 [project.scripts]

@@ -1,9 +1,11 @@
 from pydantic_ai import Agent
 
 from panda_brain.config import get_model
+from panda_brain.deps import Deps
 
 bilibili_agent = Agent(
     get_model(),
+    deps_type=Deps,
     system_prompt=(
         "你是 B 站（哔哩哔哩）专家。\n"
         "用户询问番剧 ssid、播放链接等时，必须调用 search_bangumi_ssid 工具搜索，"

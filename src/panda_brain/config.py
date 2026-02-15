@@ -8,6 +8,10 @@ class Settings(BaseSettings):
 
     ollama_base_url: str = "http://localhost:11434/v1"
     default_model: str = "qwen3:latest"
+    # LanceDB 数据目录，支持本地路径或云 URI
+    lancedb_path: str = ".lancedb"
+    # 向量化模型（sentence-transformers 模型名）
+    lancedb_embedding_model: str = "BAAI/bge-small-en-v1.5"
 
 
 settings = Settings()

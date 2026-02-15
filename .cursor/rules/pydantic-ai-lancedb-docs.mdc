@@ -1,0 +1,25 @@
+---
+description: 实现 Pydantic-AI 或 LanceDB 相关功能时先查阅官方文档与最佳实践
+alwaysApply: true
+---
+
+# Pydantic-AI 与 LanceDB 开发前必读
+
+在实现与 **Pydantic-AI** 或 **LanceDB** 相关的功能时，请按以下流程进行：
+
+## 1. 先查文档再写代码
+
+- **Pydantic-AI**：查阅 [官方文档](https://ai.pydantic.dev/)（含 API、Agent 用法、RunContext、消息类型等），按推荐方式实现。
+- **LanceDB**：查阅 LanceDB 官方文档与最佳实践，再设计表结构、查询与集成方式。
+
+## 2. 优先采用最佳实践
+
+- 使用文档中推荐的 API 与模式，避免自己发明轮子。
+- 涉及 Agent、Tools、依赖注入、模型配置时，以 Pydantic-AI 文档示例和约定为准。
+- 涉及向量存储、检索、索引时，以 LanceDB 文档的用法为准。
+
+## 3. 实现步骤建议
+
+1. 在写具体代码前，先通过文档或 Context7/Linkup 等工具检索当前用法与示例。
+2. 确认所需参数、返回值与错误处理方式后再实现。
+3. 若文档与现有项目代码（如 `.cursor/skills/panda-brain-dev/SKILL.md`）有冲突，以官方文档为准，并必要时同步更新项目约定。

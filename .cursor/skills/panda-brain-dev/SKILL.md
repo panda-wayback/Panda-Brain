@@ -10,14 +10,16 @@ description: Panda Brain 多智能体项目的架构规范和开发指南。在�
 ```
 src/panda_brain/
 ├── config.py                # 配置 + get_model() 工厂
+├── deps.py                  # 全局依赖 Deps（含 lancedb: LanceDBService），注入到各 agent
+├── storage/                 # LanceDB 向量存储实现（供 deps.lancedb 封装调用）
 ├── orchestrator/            # 调度入口（独立于子 agent）
 │   ├── __init__.py
-│   ├── agent.py             # orchestrator 定义
-│   └── tools.py             # 委托工具（每个子 agent 一个函数）
-├── agents/                  # 所有被编排的子 agent
+│   ├── agent.py             # orchestrator 定义（deps_type=Deps）
+│   └── tools.py             # 委托工具 + lancedb_add / lancedb_search / lancedb_list_tables
+├── agents/                  # 所有被编排的子 agent（均 deps_type=Deps）
 │   ├── coder/
 │   └── network/
-└── main.py                  # CLI 入口
+└── main.py                  # CLI 入口（create_deps() 后 run(..., deps=deps)）
 ```
 
 核心原则：`orchestrator/` 与 `agents/` 同级，目录结构直接表达调用关系。
@@ -28,14 +30,16 @@ src/panda_brain/
 
 在 `agents/` 下新建文件夹，文件夹名即 agent 名。包含三个文件：
 
-**agent.py** — 定义 agent 实例：
+**agent.py** — 定义 agent 实例（统一使用 `deps_type=Deps`，以便委托时传入 deps、工具内可用 `ctx.deps.lancedb`）：
 
 ```python
 from pydantic_ai import Agent
 from panda_brain.config import get_model
+from panda_brain.deps import Deps
 
 xxx_agent = Agent(
     get_model(),
+    deps_type=Deps,
     system_prompt="你是一个 XXX 专家。\n始终用中文回答。",
 )
 ```
@@ -52,7 +56,7 @@ async def some_tool(param: str) -> str:
 ```
 
 - 不需要 `RunContext` 的工具用 `@agent.tool_plain`
-- 需要依赖注入的工具用 `@agent.tool`，参数为 `ctx: RunContext[DepsType]`
+- 需要依赖注入（如 `ctx.deps.lancedb` 查库/写库）的工具用 `@agent.tool`，参数为 `ctx: RunContext[Deps]`
 
 **\_\_init\_\_.py** — 导出 agent 并触发工具注册：
 
@@ -64,19 +68,20 @@ __all__ = ["xxx_agent"]
 
 ### 第二步：注册到 orchestrator
 
-在 `orchestrator/tools.py` 中添加委托函数：
+在 `orchestrator/tools.py` 中添加委托函数（`ctx` 为 `RunContext[Deps]`，委托时传入 `deps=ctx.deps`）：
 
 ```python
 from panda_brain.agents.xxx import xxx_agent
+from panda_brain.deps import Deps
 
 @orchestrator.tool
-async def delegate_to_xxx(ctx: RunContext, task: str) -> str:
+async def delegate_to_xxx(ctx: RunContext[Deps], task: str) -> str:
     """描述何时应该委托给这个 agent（LLM 根据此描述路由）。"""
-    result = await xxx_agent.run(task, usage=ctx.usage)
+    result = await xxx_agent.run(task, deps=ctx.deps, usage=ctx.usage)
     return result.output
 ```
 
-关键：`usage=ctx.usage` 确保 token 用量统一计量。
+关键：`deps=ctx.deps` 使子 agent 可用 LanceDB 等依赖；`usage=ctx.usage` 确保 token 用量统一计量。
 
 完成。orchestrator 通过委托函数的 docstring 自动识别新 agent，无需修改 orchestrator 的 prompt。
 
@@ -109,7 +114,7 @@ async def delegate_to_xxx(ctx: RunContext, task: str) -> str:
 
 ### 不做的事
 
-- 不提前创建 `deps.py`、`factory.py`、`shared/` — 等有实际需求再加
+- 不再新增全局 deps 之外的 `factory.py`、`shared/` — 有需求时再议
 - 不在 agent 之间直接互相调用 — 统一由 orchestrator 编排
 - 不把 orchestrator 放进 `agents/` 目录 — 它是调度层，不是子 agent
 - 不在 orchestrator 的 prompt 中罗列子 agent 的功能描述
