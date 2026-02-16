@@ -48,7 +48,7 @@ async def fetch_danmaku_for_bangumi(
         return "请提供 ssid 或 keyword（番剧名）之一。"
     # 若指定了 keyword + season + episode，用解析逻辑拿单集 bvid，再抓取
     if (keyword or "").strip() and season is not None and episode is not None:
-        bvid, _ = await _resolve(keyword.strip(), season=season, episode=episode)
+        bvid, _, _ = await _resolve(keyword.strip(), season=season, episode=episode)
         if bvid is None:
             return f"未找到「{keyword}」第{season}季第{episode}集，请检查或改用 resolve_bangumi_to_bvid 查看。"
         n, msg = await fetch_danmaku_and_store(

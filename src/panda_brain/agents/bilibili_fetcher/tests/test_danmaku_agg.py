@@ -38,7 +38,7 @@ def _list_rows_by_source(bvid: str, limit: int = 25) -> list[dict]:
 async def run_danmaku_agg_test(keyword: str = "骨王", season: int = 1, episode: int = 1, show_rows: int = 20):
     """骨王第一季第一集：resolve -> 抓取弹幕按秒聚合 -> 展示若干秒。返回 (bvid, 写入条数, 聚合行列表)。"""
     print(f"1) 解析「{keyword}」第{season}季第{episode}集 ...")
-    bvid, desc = await resolve_bangumi_to_bvid(keyword, season=season, episode=episode)
+    bvid, _play_url, desc = await resolve_bangumi_to_bvid(keyword, season=season, episode=episode)
     if not bvid:
         print(f"   {desc}")
         return None, 0, []

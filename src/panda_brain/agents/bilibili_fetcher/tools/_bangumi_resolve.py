@@ -103,13 +103,14 @@ async def resolve_bangumi_to_bvid(
     keyword: str,
     season: int = 1,
     episode: int = 1,
-) -> tuple[str | None, str]:
+) -> tuple[str | None, str, str]:
     """
-    先搜索全部番剧结果，再按「第 season 季、第 episode 集」定位，返回对应 bvid。
-    返回 (bvid, 描述)；未找到时 bvid 为 None，描述为错误说明。
+    先搜索全部番剧结果，再按「第 season 季、第 episode 集」定位，返回对应 bvid 与播放链接。
+    返回 (bvid, play_url, 描述)；未找到时 bvid 为 None，play_url 为空串，描述为错误说明。
+    番剧正确链接格式为 https://www.bilibili.com/bangumi/play/ep{epid}（epid 为数字）。
     """
     if season < 1 or episode < 1:
-        return None, "season 与 episode 均须 >= 1"
+        return None, "", "season 与 episode 均须 >= 1"
     s1_query = f"{keyword} 第一季" if season == 1 else keyword
     from_s1 = await _collect_candidates(s1_query, from_s1_query=(season == 1))
     from_generic = await _collect_candidates(keyword, from_s1_query=False)
@@ -140,13 +141,15 @@ async def resolve_bangumi_to_bvid(
             if idx >= len(episodes):
                 continue
             ep = episodes[idx]
+            epid = ep.get("id")
             bvid = ep.get("bvid")
-            if not bvid and ep.get("id"):
-                ep_obj = bangumi.Episode(epid=ep["id"])
+            if not bvid and epid:
+                ep_obj = bangumi.Episode(epid=epid)
                 bvid = await ep_obj.get_bvid()
             if bvid:
+                play_url = f"https://www.bilibili.com/bangumi/play/ep{epid}" if epid else ""
                 desc = f"第{season}季 第{episode}集（ssid={ssid}, {c['title'][:40]}）"
-                return bvid, desc
+                return bvid, play_url, desc
         except Exception:
             continue
-    return None, f"未找到「{keyword}」第{season}季第{episode}集对应的 bvid，请确认季/集或改用 search_bangumi 查看全部结果。"
+    return None, "", f"未找到「{keyword}」第{season}季第{episode}集对应的 bvid，请确认季/集或改用 search_bangumi 查看全部结果。"
