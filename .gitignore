@@ -28,3 +28,4 @@ uv.lock
 # 存储目录
 .lancedb
 .panda_brain/
+.conda

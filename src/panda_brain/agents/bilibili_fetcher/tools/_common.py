@@ -8,6 +8,7 @@ from bilibili_api import Credential
 # LanceDB 表名
 TABLE_DANMAKU = "bilibili_danmaku"
 TABLE_COMMENTS = "bilibili_comments"
+TABLE_EPISODES = "bilibili_episodes"  # 番剧各集标题、BVID、播放链接，供后续从库查询
 
 # 弹幕单条最多写入的字符（避免过长）
 DANMAKU_TEXT_MAX = 200

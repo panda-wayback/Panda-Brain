@@ -9,24 +9,26 @@ from bilibili_api import bangumi, search
 from bilibili_api.search import SearchObjectType
 
 
-# 季数在标题中的匹配：第一季/第1季/1期 等；排除 第二季/Ⅲ 等
-_SEASON_PATTERN = re.compile(
+# B 站搜索 API 仅通过 title 区分季：OVERLORD / OVERLORD Ⅱ / OVERLORD Ⅲ，无「第一季」字段
+# 罗马数字 Ⅱ Ⅲ 等 = 第二季/第三季；标题无这些则为「基础季」= 第一季
+_ROMAN_III = re.compile(r"Ⅲ|第三|第3|3期")
+_ROMAN_II = re.compile(r"Ⅱ|第二|第2|2期")
+_ROMAN_IV = re.compile(r"Ⅳ|第四|第4|4期")
+_EXPLICIT_SEASON = re.compile(
     r"(?:第一季|第1季|1期)|(?:第二季|第2季|2期)|(?:第三季|第3季|3期)|(?:第四季|第4季|4期)|(?:第五季|第5季|5期)"
 )
-_ROMAN_EXCLUDE = re.compile(r"[ⅡⅢⅣⅴⅵⅱⅲⅳⅵ]")  # 罗马数字 2–6，排除误判第一季
 
 
 def season_label(title: str, subtitle: str) -> str:
-    """从标题/副标题解析季标签，返回「第一季」「第二季」「第三季」或「季数未知」。"""
+    """仅根据 B 站 API 返回的 title/subtitle 解析季：有 Ⅱ/Ⅲ/第二/第三 等则对应季，否则为第一季（API 用无后缀表示 S1）。"""
     t = (title or "") + " " + (subtitle or "")
-    if _ROMAN_EXCLUDE.search(t):
-        if "第三" in t or "第3" in t or "Ⅲ" in t:
-            return "第三季"
-        if "第二" in t or "第2" in t or "Ⅱ" in t:
-            return "第二季"
-        if "第四" in t or "第4" in t:
-            return "第四季"
-    m = _SEASON_PATTERN.search(t)
+    if _ROMAN_III.search(t):
+        return "第三季"
+    if _ROMAN_II.search(t):
+        return "第二季"
+    if _ROMAN_IV.search(t):
+        return "第四季"
+    m = _EXPLICIT_SEASON.search(t)
     if m:
         g = m.group(0)
         if "一" in g or "1" in g:
@@ -39,7 +41,8 @@ def season_label(title: str, subtitle: str) -> str:
             return "第四季"
         if "五" in g or "5" in g:
             return "第五季"
-    return "季数未知"
+    # API 用「无 Ⅱ/Ⅲ/第二/第三」的标题表示第一季（如 OVERLORD）
+    return "第一季"
 
 
 def season_number(title: str, subtitle: str) -> int | None:

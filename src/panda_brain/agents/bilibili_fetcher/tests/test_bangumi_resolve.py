@@ -27,9 +27,11 @@ class TestSeasonLabel(unittest.TestCase):
         self.assertNotEqual(season_label("OVERLORD Ⅲ", ""), "第一季")
         self.assertEqual(season_label("OVERLORD Ⅲ", ""), "第三季")
 
-    def test_unknown(self):
-        self.assertEqual(season_label("未知番剧", ""), "季数未知")
-        self.assertEqual(season_label("", ""), "季数未知")
+    def test_no_season_in_title_default_first(self):
+        # B 站 API 用「无 Ⅱ/Ⅲ/第二/第三」的标题表示第一季（如 OVERLORD）；无任何季信息时默认第一季
+        self.assertEqual(season_label("未知番剧", ""), "第一季")
+        self.assertEqual(season_label("", ""), "第一季")
+        self.assertEqual(season_label("OVERLORD", ""), "第一季")
 
 
 class TestSeasonNumber(unittest.TestCase):
@@ -40,8 +42,8 @@ class TestSeasonNumber(unittest.TestCase):
         self.assertEqual(season_number("某番 第2季", ""), 2)
         self.assertEqual(season_number("某番 第三季", ""), 3)
 
-    def test_unknown(self):
-        self.assertIsNone(season_number("未知番", ""))
+    def test_numeric_and_default(self):
+        self.assertEqual(season_number("未知番", ""), 1)  # 无季信息时 season_label 为第一季
         self.assertEqual(season_number("OVERLORD Ⅲ", ""), 3)
 
 
