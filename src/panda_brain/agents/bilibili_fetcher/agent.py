@@ -12,4 +12,5 @@ bilibili_fetcher_agent = Agent(
     get_model(),
     deps_type=Deps,
     system_prompt=load_system_prompt(_YAML_PATH),
+    model_settings={"max_tokens": 32768},
 )

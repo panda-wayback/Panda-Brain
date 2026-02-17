@@ -6,9 +6,17 @@ import asyncio
 import json
 import logging
 import os
+import re
 from typing import Any
 
 logger = logging.getLogger(__name__)
+
+
+def _strip_html(s: str) -> str:
+    """去掉 B 站 API 可能返回的 HTML 高亮标签（如 <em class="keyword">），只保留纯文本。"""
+    if not s:
+        return s
+    return re.sub(r"<[^>]+>", "", s).strip()
 
 from bilibili_api import Credential, bangumi, search
 from bilibili_api.search import SearchObjectType
@@ -38,8 +46,8 @@ async def _collect_candidates(keyword: str, from_s1: bool) -> list[dict[str, Any
             ssid = item.get("season_id") or item.get("ssid")
             if not ssid:
                 continue
-            title = (item.get("title") or "").strip()
-            subtitle = (item.get("subtitle") or "").strip()
+            title = _strip_html((item.get("title") or "").strip())
+            subtitle = _strip_html((item.get("subtitle") or "").strip())
             out.append({
                 "ssid": ssid,
                 "season_label": (title or subtitle or "第一季"),
@@ -87,7 +95,8 @@ def get_single_from_db(deps: Deps, keyword: str, season: int, episode: int) -> s
                 continue
             u = o.get("play_url")
             if u and isinstance(u, str):
-                return f"播放链接: {u}\n（来自库：{o.get('title') or r.get('text') or ''}）"
+                raw = o.get("title") or r.get("text") or ""
+                return f"播放链接: {u}\n（来自库：{_strip_html(raw)}）"
     except Exception:
         pass
     return None
@@ -103,12 +112,15 @@ def _alias_note_from_db(deps: Deps, keyword: str, link_output: str) -> str:
             o = parse_extra(r)
             labels = o.get("labels") or []
             aliases = o.get("aliases") or labels or []
-            others = [lb for lb in labels if lb and lb != keyword and lb in link_output]
+            # link_output 已去 HTML，用去 HTML 后的 label 做匹配
+            others = [lb for lb in labels if lb and _strip_html(lb) != keyword and _strip_html(lb) in link_output]
             if not others:
                 continue
-            note = f"\n\n（库中季标题为「{'」「'.join(others[:5])}」等，与「{keyword}」为同一作品。"
-            if aliases:
-                note += f" 该番剧在库中的名称/别名：{', '.join(list(aliases)[:8])}。"
+            others_clean = [_strip_html(lb) for lb in others[:5]]
+            aliases_clean = [_strip_html(a) for a in list(aliases)[:8]] if aliases else []
+            note = f"\n\n（库中季标题为「{'」「'.join(others_clean)}」等，与「{keyword}」为同一作品。"
+            if aliases_clean:
+                note += f" 该番剧在库中的名称/别名：{', '.join(aliases_clean)}。"
             note += "）"
             return note
     except Exception:
@@ -117,26 +129,37 @@ def _alias_note_from_db(deps: Deps, keyword: str, link_output: str) -> str:
 
 
 def get_all_from_db(deps: Deps, keyword: str) -> str | None:
-    """在 TABLE_EPISODES 中按 keyword 语义检索最多 200 条，只保留 text 含 keyword 的文档（避免混入其它番），
-    拼成「【季】第N集 标题 — BVID 链接」列表字符串；并从 TABLE_ANIME_ALIASES 附带同一作品说明（若有）。无有效行或无 play_url 则返回 None。"""
+    """在 TABLE_EPISODES 中按 keyword 语义检索，只保留 text 含 keyword 的文档（避免混入其它番），
+    按季+集数排序后拼成「【季】第N集 标题 — BVID 链接」列表；并从 TABLE_ANIME_ALIASES 附带同一作品说明（若有）。无有效行或无 play_url 则返回 None。"""
     try:
         keyword = (keyword or "").strip()
-        rows = deps.lancedb.search(TABLE_EPISODES, keyword, limit=500)
-        rows = [r for r in rows if keyword in (r.get("text") or "")][:200]
+        # 单番剧集数有限（通常几十到几百），用较大 limit 尽量一次取全，避免向量检索截断
+        rows = deps.lancedb.search(TABLE_EPISODES, keyword, limit=10000)
+        rows = [r for r in rows if keyword in (r.get("text") or "")]
         if not rows:
             logger.info("[获取链接] 从库读取「%s」: 0 条（过滤后）", keyword)
             return None
+        # 按季标题、集数排序，保证展示顺序为第1季第1集…第1季第N集、第2季第1集…
+        def _sort_key(r):
+            o = parse_extra(r)
+            return (str(o.get("season_label") or "正片"), int(o.get("episode_index") or 0))
+        rows.sort(key=_sort_key)
         lines = []
         for r in rows:
             o = parse_extra(r)
             u = (o.get("play_url") or "").strip()
             if not u:
                 continue
-            lines.append(f"【{o.get('season_label') or '正片'}】第{o.get('episode_index','')}集 {o.get('title') or r.get('text','')} — {r.get('source','')} {u}")
+            label = _strip_html(str(o.get("season_label") or "正片"))
+            title = _strip_html(str(o.get("title") or r.get("text") or ""))
+            lines.append(f"【{label}】第{o.get('episode_index','')}集 {title} — {r.get('source','')} {u}")
         if not lines:
             logger.info("[获取链接] 从库读取「%s」: 检索 %d 条但无有效 play_url", keyword, len(rows))
             return None
         out = f"库中已有该番播放链接，共 {len(lines)} 条：\n\n" + "\n".join(lines)
+        # 兜底：整段去掉 HTML 标签（不 strip 首尾），避免库里历史数据仍带 <em> 等
+        if out and "<" in out and ">" in out:
+            out = re.sub(r"<[^>]+>", "", out)
         note = _alias_note_from_db(deps, keyword, out)
         if not note:
             # 已有数据可能未写过别名：用本次结果的季标题回写一条（仅当别名表尚无该 keyword 时）
@@ -145,12 +168,14 @@ def get_all_from_db(deps: Deps, keyword: str) -> str | None:
             if others:
                 alias_rows = deps.lancedb.search(TABLE_ANIME_ALIASES, keyword, limit=1)
                 if not any(keyword in (r.get("text") or "") for r in alias_rows):
-                    names = {keyword} | set(labels)
+                    names = {keyword} | set(_strip_html(lb) for lb in labels)
                     alias_text = f"{' '.join(names)} 同一番剧 别名 库中季标题 番剧名"
                     alias_extra = json.dumps({"keyword": keyword, "labels": labels, "aliases": list(names)}, ensure_ascii=False)
                     deps.lancedb.add_documents(TABLE_ANIME_ALIASES, [{"text": alias_text, "source": f"alias:{keyword}", "extra": alias_extra}])
-                note = f"\n\n（库中季标题为「{'」「'.join(others[:5])}」等，与「{keyword}」为同一作品。）"
+                note = f"\n\n（库中季标题为「{'」「'.join(_strip_html(lb) for lb in others[:5])}」等，与「{keyword}」为同一作品。）"
         out += note
+        if "<" in out and ">" in out:
+            out = re.sub(r"<[^>]+>", "", out)
         logger.info("[获取链接] 从库读取「%s」: 共 %d 条, 返回文本 %d 字符", keyword, len(lines), len(out))
         return out
     except Exception as e:
@@ -174,6 +199,7 @@ def _sections(ep_data: dict) -> list[tuple[str, dict]]:
 async def _store_ssid(deps: Deps, ssid: int, label: str, keyword: str) -> tuple[int, int, list[str]]:
     """拉取 B 站番剧某一季（ssid）的全部集数，写入 TABLE_EPISODES（已存在 bvid 则跳过）。
     label 为该季展示名（如「第一季」）。返回 (本次新增条数, 该季总集数, 用于展示的行列表)。"""
+    label = _strip_html(label)
     cred = get_credential()
     s = bangumi.Bangumi(ssid=ssid, credential=cred)
     sections = _sections(await s.get_episode_list())
@@ -185,11 +211,12 @@ async def _store_ssid(deps: Deps, ssid: int, label: str, keyword: str) -> tuple[
     prev_sec = None
     idx = 0
     for sec_title, ep in sections:
+        sec_title = _strip_html(sec_title or "")
         if sec_title != prev_sec:
             prev_sec = sec_title
             idx = 0
         idx += 1
-        title = (ep.get("share_copy") or ep.get("long_title") or ep.get("title") or "未知").strip()
+        title = _strip_html((ep.get("share_copy") or ep.get("long_title") or ep.get("title") or "未知").strip())
         epid = ep.get("id")
         bvid = ep.get("bvid")
         if not bvid and epid:
