@@ -15,10 +15,10 @@ rules:
       先 get_bangumi_play_url 拿链接，在纯 URL 后加 ?t=秒数 再 browser_navigate（7分钟=420，8分45秒=525）。
     example: '骨王第12集 7分钟播放 → URL?t=420'
 
-  - when: 已打开播放页后用户说「第N分钟」「从N分M秒」「跳到N分钟」
+  - when: 已打开播放页后用户说「第N分钟」「从N分M秒」「跳到N分钟」「从第N分钟开始播放」（多轮中上一句若已打开某集，本句未给番剧名/集数则视为对当前页操作）
     action: |
-      用 browser_evaluate。秒数=分钟×60+秒。function 填 () => { const v = document.querySelector('video'); if (v) { v.currentTime = 秒数; v.play(); return v.currentTime; } return null; }
-    example: '从8分45秒播放 → currentTime = 525'
+      直接对当前页用 browser_evaluate 跳转进度，不要索要番剧名或集数。秒数=分钟×60+秒。function 填 () => { const v = document.querySelector('video'); if (v) { v.currentTime = 秒数; v.play(); return v.currentTime; } return null; }
+    example: '从第6分钟开始播放 → currentTime = 360'
 
   - when: get_bangumi_play_url 返回未找到或失败
     action: |

@@ -1,18 +1,12 @@
-# B 站相关智能体对比
+# B 站相关智能体：bilibili_fetcher
 
-## bilibili_fetcher（抓取智能体）— 推荐用于「拿数据、入库」
+## bilibili_fetcher（抓取智能体）
 
-- **职责**：抓取 B 站数据并写入 LanceDB（播放链接表 `bilibili_episodes`、弹幕表 `bilibili_danmaku`），供后续从库查询。
-- **用户说「骨王」时**：调用 `fetch_and_store_bangumi_play_links(keyword)`，**并行**拉取全部季的集列表与播放链接，入库并**原文输出**完整列表（含【第一季】【第二季】【第三季】等标签）。
-- **特点**：返回快（并行请求）、能区分多季、结果与速度均优于下面的分析智能体；第一季通过「关键词 第一季」搜索 + 第一个季数未知项标为第一季。
-
-## bilibili（分析智能体）
-
-- **职责**：弹幕密度分析、高赞评论等，依赖「已有 bvid/ssid」或先查再分析。
-- **用户说「骨王」时**：倾向反问「是否需要分析某集的弹幕密度或获取高赞评论？」；若用户再要「播放链接」，会调 `search_bangumi_ssid` + `get_bangumi_play_links`，但**只拿一个 ssid**（如 2576），只展示「季2576」一季，**无法区分第一季/第二季/第三季**，且为串行、较慢。
-- **结论**：不适合做「查番 + 列全季播放链接」；该需求应由 bilibili_fetcher 完成，分析智能体在拿到 bvid 后再做密度/评论分析。
+- **职责**：抓取 B 站数据并写入 LanceDB（播放链接表 `bilibili_episodes`、弹幕表 `bilibili_danmaku`），供后续从库查询；解析番剧名到播放链接（`resolve_bangumi_to_bvid`）。
+- **用户说「骨王」时**：可调用 `fetch_and_store_bangumi_play_links(keyword)` 等入库，或仅解析单集播放链接供 browser_mcp 打开。
+- **browser_mcp** 会调用 bilibili_fetcher 的解析能力（get_bangumi_play_url）拿到播放 URL，再用 Playwright MCP 打开与跳转。
 
 ## 使用建议
 
-- 要**播放链接、入库、供后续查询**：用 bilibili_fetcher（`run_interactive.py` 或委托）。
-- 要**弹幕密度、高赞评论分析**：先由 fetcher 或编排提供 bvid，再交 bilibili 分析。
+- 要**播放链接、入库、供后续查询**：用 bilibili_fetcher（`run_interactive.py` 或 orchestrator 委托）。
+- 要**打开番剧页、从第 N 分钟播**：用 browser_mcp（内部会调 get_bangumi_play_url）。
