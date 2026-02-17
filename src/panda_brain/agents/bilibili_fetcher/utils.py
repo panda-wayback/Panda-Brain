@@ -11,6 +11,7 @@ from bilibili_api import Credential, bangumi, search
 from bilibili_api.search import SearchObjectType
 
 from panda_brain.deps import Deps
+from panda_brain.lancedb import parse_extra
 
 # LanceDB 表名，存番剧各集的 text / source(bvid) / extra(play_url 等)
 TABLE_EPISODES = "bilibili_episodes"
@@ -43,11 +44,8 @@ async def _collect_candidates(keyword: str, from_s1: bool) -> list[dict[str, Any
 
 
 def _has_anime_in_db(deps: Deps, keyword: str) -> bool:
-    """用 keyword 在 TABLE_EPISODES 做语义检索 limit=1，有结果则视为库中已有该番。"""
-    try:
-        return len(deps.lancedb.search(TABLE_EPISODES, (keyword or "").strip(), limit=1)) >= 1
-    except Exception:
-        return False
+    """库中是否已有该番：委托 LanceDB 公共 has_matching_docs。"""
+    return deps.lancedb.has_matching_docs(TABLE_EPISODES, (keyword or "").strip())
 
 
 async def ensure_anime_in_db(deps: Deps, keyword: str) -> None:
@@ -59,26 +57,12 @@ async def ensure_anime_in_db(deps: Deps, keyword: str) -> None:
     await fetch_all_and_store(deps, keyword)
 
 
-def _extra(r: dict) -> dict:
-    """从 LanceDB 返回的行 r 中解析 extra 字段为 dict。
-    extra 可能是已解析的 dict 或 JSON 字符串，解析失败返回 {}。"""
-    e = r.get("extra")
-    if isinstance(e, dict):
-        return e
-    if isinstance(e, str):
-        try:
-            return json.loads(e) or {}
-        except json.JSONDecodeError:
-            pass
-    return {}
-
-
 def get_single_from_db(deps: Deps, keyword: str, season: int, episode: int) -> str | None:
     """在 TABLE_EPISODES 中按「keyword + 第 episode 集」语义检索，匹配 episode_index 后取 play_url。
     命中返回「播放链接: URL」及标题；未命中返回 None。"""
     try:
         for r in deps.lancedb.search(TABLE_EPISODES, f"{keyword} 第{episode}集", limit=10):
-            o = _extra(r)
+            o = parse_extra(r)
             if o.get("episode_index") != episode:
                 continue
             u = o.get("play_url")
@@ -98,7 +82,7 @@ def get_all_from_db(deps: Deps, keyword: str) -> str | None:
             return None
         lines = []
         for r in rows:
-            o = _extra(r)
+            o = parse_extra(r)
             u = (o.get("play_url") or "").strip()
             if not u:
                 continue

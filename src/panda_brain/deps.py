@@ -5,6 +5,7 @@ from typing import Any
 
 from panda_brain.lancedb import (
     add_documents as _add_documents,
+    has_matching_docs as _has_matching_docs,
     list_tables as _list_tables,
     search as _search,
     table_has_source as _table_has_source,
@@ -38,6 +39,10 @@ class LanceDBService:
     def table_has_source(self, table_name: str, source: str) -> bool:
         """当前库中该表是否已有该 source 的数据。"""
         return _table_has_source(table_name, source)
+
+    def has_matching_docs(self, table_name: str, query_text: str) -> bool:
+        """表中是否存在与 query_text 语义匹配的文档（有则 True）。"""
+        return _has_matching_docs(table_name, query_text)
 
 
 @dataclass

@@ -99,3 +99,11 @@ def table_has_source(table_name: str, source: str) -> bool:
         return len(rows) > 0
     except Exception:
         return False
+
+
+def has_matching_docs(table_name: str, query_text: str) -> bool:
+    """表中是否存在与 query_text 语义匹配的文档（检索 1 条，有则 True）。表不存在或异常为 False。"""
+    try:
+        return len(search(table_name, query_text, limit=1)) >= 1
+    except Exception:
+        return False
