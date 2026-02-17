@@ -1,0 +1,573 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e489]:
+      - list [ref=e490]:
+        - listitem [ref=e491]:
+          - link "首页" [ref=e492] [cursor=pointer]:
+            - /url: //www.bilibili.com
+            - img [ref=e493]
+            - generic [ref=e495]:
+              - generic [ref=e496]: 首页
+              - img [ref=e497]
+        - listitem [ref=e500]:
+          - link "番剧" [ref=e501] [cursor=pointer]:
+            - /url: //www.bilibili.com/anime/
+        - listitem [ref=e502]:
+          - link "直播" [ref=e503] [cursor=pointer]:
+            - /url: //live.bilibili.com
+        - listitem [ref=e504]:
+          - link "游戏中心" [ref=e505] [cursor=pointer]:
+            - /url: //game.bilibili.com/platform
+        - listitem [ref=e506]:
+          - link "会员购" [ref=e507] [cursor=pointer]:
+            - /url: //show.bilibili.com/platform/home.html?msource=pc_web
+        - listitem [ref=e508]:
+          - link "漫画" [ref=e509] [cursor=pointer]:
+            - /url: //manga.bilibili.com?from=bill_top_mnav
+        - listitem [ref=e510]:
+          - link "赛事" [ref=e511] [cursor=pointer]:
+            - /url: //www.bilibili.com/match/home/
+        - listitem
+        - listitem
+        - listitem
+      - generic [ref=e514]:
+        - textbox "LOL小绿毛资讯" [ref=e516]
+        - img [ref=e518] [cursor=pointer]
+      - list [ref=e520]:
+        - listitem [ref=e521] [cursor=pointer]:
+          - listitem [ref=e522]:
+            - generic [ref=e524]: 登录
+        - listitem [ref=e525] [cursor=pointer]:
+          - listitem [ref=e527]:
+            - link [ref=e528]:
+              - /url: //account.bilibili.com/big
+              - img [ref=e529]
+        - listitem [ref=e533] [cursor=pointer]:
+          - img [ref=e535]
+        - listitem [ref=e538] [cursor=pointer]:
+          - img [ref=e540]
+        - listitem [ref=e546] [cursor=pointer]:
+          - img [ref=e548]
+        - listitem [ref=e551] [cursor=pointer]:
+          - img [ref=e553]
+        - listitem [ref=e555] [cursor=pointer]:
+          - img [ref=e557]
+        - listitem [ref=e561] [cursor=pointer]:
+          - listitem [ref=e562]:
+            - img [ref=e565]
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - generic "哔哩哔哩播放器" [ref=e40]:
+          - generic [ref=e41]:
+            - generic:
+              - generic:
+                - generic:
+                  - generic: 回忆吧！
+                  - generic: 一开始就觉得他像剑鬼了。。
+                  - generic: 最强管家没有之一。
+                  - generic: 等等 妖寿啦！我居然看到他的左眼了(≧∇≦)
+                  - generic: 这不是从零里的管家吗
+                  - generic: 这里全场买单
+                  - generic: 剑鬼老爷子！
+                  - generic: 画质君不在了
+                  - generic: 兄弟们，不要怂一起肝。
+                  - generic: 我还以为是靠谱的红秋裤
+                  - generic: 你的眼睛怎么好了
+                  - generic: 正片的我已经忍了好几部番了
+                  - generic: 剑鬼老爷子？
+                  - generic: 确实像RE0的剑鬼
+                  - generic: 从零开始异世界的剑圣？
+                  - generic: 塞巴斯酱
+                  - generic: 剑鬼老爷子
+                  - generic: 老爷子太帅了
+                  - generic: 这不是那个靠谱的成年男主
+                  - generic: 剑鬼乱入
+                  - generic: 看见这老头我还以为我看错片了
+                  - generic: 塞巴斯一创造出来就是老人所以实际年龄特别小...
+                  - generic: 这女的也是昂宿军团之一的女仆
+                  - generic: 窜剧了啊喂 2333333
+                  - generic: 我要连肝三季
+                  - generic: re 从零开始的异世界？
+                  - generic: 等等，他眼睛好了？
+                  - generic: 你的眼睛怎么好了？
+                  - generic: 赛巴斯的眼睛好了耶
+                  - generic: 这是一只史莱姆，索留香
+                  - generic: 小剧场的佐仓2333
+                  - generic: 演戏真累啊
+                  - generic: 瑞吉儿在哪里
+                  - generic: 这老头好像赤瞳里那个剑士老头
+                  - generic: 等等，他睁开了左眼
+                  - generic: 靠谱成年男性
+                  - generic: 老头好眼熟
+            - generic [ref=e569]:
+              - generic [ref=e570]:
+                - generic [ref=e571]:
+                  - button "上一个" [ref=e572]:
+                    - generic [ref=e574] [cursor=pointer]:
+                      - img
+                  - button "播放/暂停" [ref=e575]:
+                    - img [ref=e578] [cursor=pointer]
+                  - button "下一个" [ref=e588]:
+                    - generic [ref=e590] [cursor=pointer]:
+                      - img
+                  - generic [ref=e592]: 00:43 / 24:12
+                - generic [ref=e593]:
+                  - button "清晰度" [ref=e594]:
+                    - generic [ref=e595] [cursor=pointer]: 自动
+                  - button "倍速" [ref=e596]:
+                    - generic [ref=e597] [cursor=pointer]: 倍速
+                  - button "音量" [ref=e598]:
+                    - img [ref=e601] [cursor=pointer]
+                  - button "设置" [ref=e610]:
+                    - img [ref=e613] [cursor=pointer]
+                  - button "画中画" [ref=e618]:
+                    - img [ref=e621] [cursor=pointer]
+                  - button "宽屏" [ref=e629]:
+                    - img [ref=e632] [cursor=pointer]
+                  - button "网页全屏" [ref=e637]:
+                    - img [ref=e640] [cursor=pointer]
+                  - button "全屏" [ref=e645]:
+                    - img [ref=e648] [cursor=pointer]
+              - generic [ref=e694] [cursor=pointer]:
+                - img [ref=e695]
+                - generic [ref=e700]:
+                  - img
+          - generic [ref=e54]:
+            - generic [ref=e701]:
+              - generic [ref=e702]: 6人正在看
+              - generic [ref=e703]: ，
+              - generic [ref=e704]: 已装填 6000 条弹幕
+            - generic [ref=e705]:
+              - generic "弹幕显示隐藏" [ref=e706] [cursor=pointer]:
+                - generic [ref=e707]:
+                  - checkbox [checked] [ref=e708]
+                  - generic [ref=e710]:
+                    - img
+              - generic [ref=e712] [cursor=pointer]:
+                - img
+              - generic [ref=e713]:
+                - generic [ref=e714]:
+                  - generic [ref=e715]:
+                    - text: 请先
+                    - link "登录" [ref=e716] [cursor=pointer]:
+                      - /url: javascript:void(0);
+                    - text: 或
+                    - link "注册" [ref=e717] [cursor=pointer]:
+                      - /url: //passport.bilibili.com/login?register_page=1
+                  - link "弹幕礼仪" [ref=e719] [cursor=pointer]:
+                    - /url: //www.bilibili.com/blackboard/help.html#弹幕相关?id=3ebbac9998474850bfdf42b231477371
+                    - generic [ref=e720]: 弹幕礼仪
+                    - generic [ref=e721]:
+                      - img
+                - generic [ref=e722]:
+                  - generic: 发送
+        - generic [ref=e58]:
+          - generic [ref=e59]:
+            - generic [ref=e60]:
+              - generic "点赞（Q）" [ref=e61] [cursor=pointer]:
+                - img [ref=e62]
+                - generic [ref=e64]: 8.6万
+              - generic "投币（W）" [ref=e65] [cursor=pointer]:
+                - img [ref=e67]
+                - generic [ref=e69]: 4.5万
+              - generic "收藏（E）" [ref=e70] [cursor=pointer]:
+                - img [ref=e72]
+                - generic [ref=e74]: "2953"
+              - generic [ref=e76] [cursor=pointer]:
+                - img [ref=e77]
+                - generic [ref=e80]:
+                  - generic [ref=e81]: 2.1万
+                  - generic [ref=e82]: 点击复制链接
+              - generic [ref=e84] [cursor=pointer]:
+                - img [ref=e85]
+                - generic [ref=e87]: 一起看
+            - img [ref=e91] [cursor=pointer]
+          - generic [ref=e93]:
+            - link "OVERLORD" [ref=e94] [cursor=pointer]:
+              - /url: //www.bilibili.com/bangumi/media/md2576
+              - img "OVERLORD" [ref=e96]
+            - generic [ref=e97]:
+              - link "OVERLORD" [ref=e98] [cursor=pointer]:
+                - /url: //www.bilibili.com/bangumi/media/md2576
+              - generic [ref=e99]: 4.9亿播放 · 369万弹幕 · 1060.7万系列追番
+              - generic [ref=e100]:
+                - generic [ref=e101]: 奇幻 / 战斗 / 小说改 / 架空 ·
+                - generic [ref=e102]: 2015 ·
+                - generic [ref=e103]: 已完结, 全13话 ·
+                - link "BV1Ms411U792" [ref=e106] [cursor=pointer]:
+                  - /url: //www.bilibili.com/video/BV1Ms411U792/
+              - generic "飞鼠：日野聪 雅儿贝德：原由实 夏提雅·布拉德弗伦：上坂堇 亚乌菈·贝拉·菲欧拉：加藤英美里 马雷·贝罗·菲欧雷：内山夕实 迪米乌哥斯：加藤将之 科塞特斯：三宅健太 塞巴斯·蒂安：千叶繁 娜贝拉尔：沼仓爱美" [ref=e107]:
+                - generic [ref=e108]: 声优：
+                - text: 飞鼠：日野聪 雅儿贝德：原由实 夏提雅·布拉德弗伦：上坂堇 亚乌菈·贝拉·菲欧拉：加藤英美里 马雷·贝罗·菲欧雷：内山夕实 迪米乌哥斯：加藤将之 科塞特斯：三宅健太 塞巴斯·蒂安：千叶繁 娜贝拉尔：沼仓爱美
+              - link "简介：作品主要讲述了某天，一款曾经掀起过大热潮的VRMMORPG「YGGDRASIL」停止了运营。游戏原本会停止一切服务，但过了结束时间后，玩家们却发现不能退出，NPC也产生了各自的思想。现实世界中喜爱电玩的主人公铃木悟（真名）在等待系统强制登出时，与“安兹·乌尔·恭”公会的成员一起意外穿越到了异世界，并且变成了拥有骷髅外表的最强魔法师——“飞鼠”。就这样，真正的奇幻传说正式拉开了帷幕。 展开 作品主要讲述了某天，一款曾经掀起过大热潮的VRMMORPG「YGGDRASIL」停止了运营。游戏原本会停止一切服务，但过了结束时间后，玩家们却发现不能退出，NPC也产生了各自的思想。现实世界中喜爱电玩的主人公铃木悟（真名）在等待系统强制登出时，与“安兹·乌尔·恭”公会的成员一起意外穿越到了异世界，并且变成了拥有骷髅外表的最强魔法师——“飞鼠”。就这样，真正的奇幻传说正式拉开了帷幕。" [ref=e109] [cursor=pointer]:
+                - /url: //www.bilibili.com/bangumi/media/md2576
+                - generic [ref=e110]:
+                  - paragraph [ref=e112]: 简介：作品主要讲述了某天，一款曾经掀起过大热潮的VRMMORPG「YGGDRASIL」停止了运营。游戏原本会停止一切服务，但过了结束时间后，玩家们却发现不能退出，NPC也产生了各自的思想。现实世界中喜爱电玩的主人公铃木悟（真名）在等待系统强制登出时，与“安兹·乌尔·恭”公会的成员一起意外穿越到了异世界，并且变成了拥有骷髅外表的最强魔法师——“飞鼠”。就这样，真正的奇幻传说正式拉开了帷幕。
+                  - generic [ref=e113]: 展开
+                - paragraph: 作品主要讲述了某天，一款曾经掀起过大热潮的VRMMORPG「YGGDRASIL」停止了运营。游戏原本会停止一切服务，但过了结束时间后，玩家们却发现不能退出，NPC也产生了各自的思想。现实世界中喜爱电玩的主人公铃木悟（真名）在等待系统强制登出时，与“安兹·乌尔·恭”公会的成员一起意外穿越到了异世界，并且变成了拥有骷髅外表的最强魔法师——“飞鼠”。就这样，真正的奇幻传说正式拉开了帷幕。
+              - generic [ref=e115]:
+                - generic [ref=e116]:
+                  - generic [ref=e117]:
+                    - text: "9.6"
+                    - generic [ref=e118]: 分
+                  - generic [ref=e119]: 5.6万人评分
+                - generic [ref=e120] [cursor=pointer]:
+                  - generic [ref=e121]: 评分
+                  - img [ref=e122]
+                  - img [ref=e123]
+                  - img [ref=e124]
+                  - img [ref=e125]
+                  - img [ref=e126]
+              - generic [ref=e127]:
+                - link "番剧频道" [ref=e128] [cursor=pointer]:
+                  - /url: //www.bilibili.com/anime/
+                  - img [ref=e129]
+                  - generic [ref=e131]: 番剧频道
+                - generic [ref=e132] [cursor=pointer]:
+                  - img [ref=e133]
+                  - generic [ref=e135]: 追番
+          - generic [ref=e731]:
+            - generic [ref=e732]: 评论
+            - generic [ref=e734]:
+              - img [ref=e735]
+              - text: 正在玩命加载…
+        - generic [ref=e136]:
+          - generic [ref=e139] [cursor=pointer]: 大会员年卡118元，抓马最高赢366天>
+          - generic [ref=e743] [cursor=pointer]:
+            - generic [ref=e746]:
+              - img
+            - generic [ref=e750]:
+              - text: 弹幕列表
+              - generic [ref=e751]:
+                - img
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - generic [ref=e143]:
+                - heading "正片" [level=4] [ref=e144]
+                - generic [ref=e145]: (10/13)
+              - generic [ref=e146]:
+                - img [ref=e148] [cursor=pointer]
+                - img [ref=e156] [cursor=pointer]
+            - generic [ref=e158]:
+              - generic [ref=e159]:
+                - generic [ref=e160]: 第一季
+                - generic [ref=e161] [cursor=pointer]: 第二季
+                - generic [ref=e162] [cursor=pointer]: 第三季
+                - generic [ref=e163] [cursor=pointer]: 第一季SP
+                - generic [ref=e164] [cursor=pointer]: 第一季OAD
+                - generic [ref=e165] [cursor=pointer]: 第二季SP
+                - generic [ref=e166] [cursor=pointer]: 第三季SP
+                - generic [ref=e167] [cursor=pointer]: 剧场版1
+                - generic [ref=e168] [cursor=pointer]: 剧场版2
+              - img [ref=e170] [cursor=pointer]
+            - generic [ref=e172]:
+              - generic "1" [ref=e173] [cursor=pointer]:
+                - link "1" [ref=e174]:
+                  - /url: /bangumi/play/ep63853/
+                  - generic [ref=e175]: "1"
+              - generic "2" [ref=e176] [cursor=pointer]:
+                - link "2 会员" [ref=e177]:
+                  - /url: /bangumi/play/ep63952/
+                  - generic [ref=e178]: "2"
+                  - generic [ref=e179]: 会员
+              - generic "3" [ref=e180] [cursor=pointer]:
+                - link "3 会员" [ref=e181]:
+                  - /url: /bangumi/play/ep64006/
+                  - generic [ref=e182]: "3"
+                  - generic [ref=e183]: 会员
+              - generic "4" [ref=e184] [cursor=pointer]:
+                - link "4 会员" [ref=e185]:
+                  - /url: /bangumi/play/ep64184/
+                  - generic [ref=e186]: "4"
+                  - generic [ref=e187]: 会员
+              - generic "5" [ref=e188] [cursor=pointer]:
+                - link "5 会员" [ref=e189]:
+                  - /url: /bangumi/play/ep64348/
+                  - generic [ref=e190]: "5"
+                  - generic [ref=e191]: 会员
+              - generic "6" [ref=e192] [cursor=pointer]:
+                - link "6 会员" [ref=e193]:
+                  - /url: /bangumi/play/ep64621/
+                  - generic [ref=e194]: "6"
+                  - generic [ref=e195]: 会员
+              - generic "7" [ref=e196] [cursor=pointer]:
+                - link "7 会员" [ref=e197]:
+                  - /url: /bangumi/play/ep65367/
+                  - generic [ref=e198]: "7"
+                  - generic [ref=e199]: 会员
+              - generic "8" [ref=e200] [cursor=pointer]:
+                - link "8 会员" [ref=e201]:
+                  - /url: /bangumi/play/ep66194/
+                  - generic [ref=e202]: "8"
+                  - generic [ref=e203]: 会员
+              - generic "9" [ref=e204] [cursor=pointer]:
+                - link "9 会员" [ref=e205]:
+                  - /url: /bangumi/play/ep66860/
+                  - generic [ref=e206]: "9"
+                  - generic [ref=e207]: 会员
+              - generic "10" [ref=e208] [cursor=pointer]:
+                - link "10 会员" [ref=e209]:
+                  - /url: /bangumi/play/ep68380/
+                  - generic [ref=e210]: "10"
+                  - generic [ref=e211]: 会员
+              - generic "11" [ref=e212] [cursor=pointer]:
+                - link "11 会员" [ref=e213]:
+                  - /url: /bangumi/play/ep68911/
+                  - generic [ref=e214]: "11"
+                  - generic [ref=e215]: 会员
+              - generic "12" [ref=e216] [cursor=pointer]:
+                - link "12 会员" [ref=e217]:
+                  - /url: /bangumi/play/ep69295/
+                  - generic [ref=e218]: "12"
+                  - generic [ref=e219]: 会员
+              - generic "13" [ref=e220] [cursor=pointer]:
+                - link "13 会员" [ref=e221]:
+                  - /url: /bangumi/play/ep70709/
+                  - generic [ref=e222]: "13"
+                  - generic [ref=e223]: 会员
+          - generic [ref=e224]:
+            - generic [ref=e225]: 相关推荐
+            - generic [ref=e226]:
+              - link "OVERLORD Ⅱ OVERLORD Ⅱ 全13话 4.4亿 431.4万" [ref=e228] [cursor=pointer]:
+                - /url: /bangumi/play/ss21466/
+                - img "OVERLORD Ⅱ" [ref=e231]
+                - generic [ref=e232]:
+                  - generic "OVERLORD Ⅱ" [ref=e233]
+                  - generic [ref=e235]:
+                    - generic [ref=e236]: 全13话
+                    - generic [ref=e237]:
+                      - img [ref=e238]
+                      - text: 4.4亿
+                      - img [ref=e239]
+                      - text: 431.4万
+              - link "戒律的复活 戒律的复活 全24话 1.3亿 58.1万" [ref=e241] [cursor=pointer]:
+                - /url: /bangumi/play/ss21729/
+                - img "戒律的复活" [ref=e244]
+                - generic [ref=e245]:
+                  - generic "戒律的复活" [ref=e246]
+                  - generic [ref=e248]:
+                    - generic [ref=e249]: 全24话
+                    - generic [ref=e250]:
+                      - img [ref=e251]
+                      - text: 1.3亿
+                      - img [ref=e252]
+                      - text: 58.1万
+              - link "NO GAME NO LIFE 游戏人生 NO GAME NO LIFE 游戏人生 全12话 1.2亿 337.4万" [ref=e254] [cursor=pointer]:
+                - /url: /bangumi/play/ss184/
+                - img "NO GAME NO LIFE 游戏人生" [ref=e257]
+                - generic [ref=e258]:
+                  - generic "NO GAME NO LIFE 游戏人生" [ref=e259]
+                  - generic [ref=e261]:
+                    - generic [ref=e262]: 全12话
+                    - generic [ref=e263]:
+                      - img [ref=e264]
+                      - text: 1.2亿
+                      - img [ref=e265]
+                      - text: 337.4万
+              - link "转生成蜘蛛又怎样！ 转生成蜘蛛又怎样！ 全24话 4.2亿 202万" [ref=e267] [cursor=pointer]:
+                - /url: /bangumi/play/ss36167/
+                - img "转生成蜘蛛又怎样！" [ref=e270]
+                - generic [ref=e271]:
+                  - generic "转生成蜘蛛又怎样！" [ref=e272]
+                  - generic [ref=e274]:
+                    - generic [ref=e275]: 全24话
+                    - generic [ref=e276]:
+                      - img [ref=e277]
+                      - text: 4.2亿
+                      - img [ref=e278]
+                      - text: 202万
+              - link "关于我转生变成史莱姆这档事 第二季 关于我转生变成史莱姆这档事 第二季 全26话 4.9亿 293.8万" [ref=e280] [cursor=pointer]:
+                - /url: /bangumi/play/ss36170/
+                - img "关于我转生变成史莱姆这档事 第二季" [ref=e283]
+                - generic [ref=e284]:
+                  - generic "关于我转生变成史莱姆这档事 第二季" [ref=e285]
+                  - generic [ref=e287]:
+                    - generic [ref=e288]: 全26话
+                    - generic [ref=e289]:
+                      - img [ref=e290]
+                      - text: 4.9亿
+                      - img [ref=e291]
+                      - text: 293.8万
+              - link "世界顶尖的暗杀者,转生为异世界贵族 世界顶尖的暗杀者,转生为异世界贵族 全12话 1.7亿 104.8万" [ref=e293] [cursor=pointer]:
+                - /url: /bangumi/play/ss39481/
+                - img "世界顶尖的暗杀者,转生为异世界贵族" [ref=e296]
+                - generic [ref=e297]:
+                  - generic "世界顶尖的暗杀者,转生为异世界贵族" [ref=e298]
+                  - generic [ref=e300]:
+                    - generic [ref=e301]: 全12话
+                    - generic [ref=e302]:
+                      - img [ref=e303]
+                      - text: 1.7亿
+                      - img [ref=e304]
+                      - text: 104.8万
+              - link "入间同学入魔了 入间同学入魔了 全23话 1.7亿 131.5万" [ref=e306] [cursor=pointer]:
+                - /url: /bangumi/play/ss28638/
+                - img "入间同学入魔了" [ref=e309]
+                - generic [ref=e310]:
+                  - generic "入间同学入魔了" [ref=e311]
+                  - generic [ref=e313]:
+                    - generic [ref=e314]: 全23话
+                    - generic [ref=e315]:
+                      - img [ref=e316]
+                      - text: 1.7亿
+                      - img [ref=e317]
+                      - text: 131.5万
+              - link "我独自升级 第二季 -起于暗影- 我独自升级 第二季 -起于暗影- 全13话 1.5亿 30.7万" [ref=e319] [cursor=pointer]:
+                - /url: /bangumi/play/ss80763/
+                - img "我独自升级 第二季 -起于暗影-" [ref=e322]
+                - generic [ref=e323]:
+                  - generic "我独自升级 第二季 -起于暗影-" [ref=e324]
+                  - generic [ref=e326]:
+                    - generic [ref=e327]: 全13话
+                    - generic [ref=e328]:
+                      - img [ref=e329]
+                      - text: 1.5亿
+                      - img [ref=e330]
+                      - text: 30.7万
+              - link "狮子王辛巴 中文配音 狮子王辛巴 中文配音 全52话 192.1万 1010" [ref=e332] [cursor=pointer]:
+                - /url: /bangumi/play/ss44950/
+                - img "狮子王辛巴 中文配音" [ref=e335]
+                - generic [ref=e336]:
+                  - generic "狮子王辛巴 中文配音" [ref=e337]
+                  - generic [ref=e339]:
+                    - generic [ref=e340]: 全52话
+                    - generic [ref=e341]:
+                      - img [ref=e342]
+                      - text: 192.1万
+                      - img [ref=e343]
+                      - text: "1010"
+              - link "刀剑神域 刀剑神域 全25话 2.5亿 860.3万" [ref=e345] [cursor=pointer]:
+                - /url: /bangumi/play/ss4452/
+                - img "刀剑神域" [ref=e348]
+                - generic [ref=e349]:
+                  - generic "刀剑神域" [ref=e350]
+                  - generic [ref=e352]:
+                    - generic [ref=e353]: 全25话
+                    - generic [ref=e354]:
+                      - img [ref=e355]
+                      - text: 2.5亿
+                      - img [ref=e356]
+                      - text: 860.3万
+              - link "狩龙人拉格纳 狩龙人拉格纳 全24话 5337万 14.5万" [ref=e358] [cursor=pointer]:
+                - /url: /bangumi/play/ss46090/
+                - img "狩龙人拉格纳" [ref=e361]
+                - generic [ref=e362]:
+                  - generic "狩龙人拉格纳" [ref=e363]
+                  - generic [ref=e365]:
+                    - generic [ref=e366]: 全24话
+                    - generic [ref=e367]:
+                      - img [ref=e368]
+                      - text: 5337万
+                      - img [ref=e369]
+                      - text: 14.5万
+              - link "平凡职业造就世界最强 平凡职业造就世界最强 全14话 1.7亿 182万" [ref=e371] [cursor=pointer]:
+                - /url: /bangumi/play/ss27995/
+                - img "平凡职业造就世界最强" [ref=e374]
+                - generic [ref=e375]:
+                  - generic "平凡职业造就世界最强" [ref=e376]
+                  - generic [ref=e378]:
+                    - generic [ref=e379]: 全14话
+                    - generic [ref=e380]:
+                      - img [ref=e381]
+                      - text: 1.7亿
+                      - img [ref=e382]
+                      - text: 182万
+              - link "齐木楠雄的灾难 完结篇 齐木楠雄的灾难 完结篇 全2话 2014.5万 9.3万" [ref=e384] [cursor=pointer]:
+                - /url: /bangumi/play/ss26347/
+                - img "齐木楠雄的灾难 完结篇" [ref=e387]
+                - generic [ref=e388]:
+                  - generic "齐木楠雄的灾难 完结篇" [ref=e389]
+                  - generic [ref=e391]:
+                    - generic [ref=e392]: 全2话
+                    - generic [ref=e393]:
+                      - img [ref=e394]
+                      - text: 2014.5万
+                      - img [ref=e395]
+                      - text: 9.3万
+              - link "飙速宅男 新世代 飙速宅男 新世代 全25话 1455.5万 8.4万" [ref=e397] [cursor=pointer]:
+                - /url: /bangumi/play/ss5794/
+                - img "飙速宅男 新世代" [ref=e400]
+                - generic [ref=e401]:
+                  - generic "飙速宅男 新世代" [ref=e402]
+                  - generic [ref=e404]:
+                    - generic [ref=e405]: 全25话
+                    - generic [ref=e406]:
+                      - img [ref=e407]
+                      - text: 1455.5万
+                      - img [ref=e408]
+                      - text: 8.4万
+              - link "趣趣知知鸟 第2季 中文配音 趣趣知知鸟 第2季 中文配音 全15话 60.2万 16" [ref=e410] [cursor=pointer]:
+                - /url: /bangumi/play/ss130009/
+                - img "趣趣知知鸟 第2季 中文配音" [ref=e413]
+                - generic [ref=e414]:
+                  - generic "趣趣知知鸟 第2季 中文配音" [ref=e415]
+                  - generic [ref=e417]:
+                    - generic [ref=e418]: 全15话
+                    - generic [ref=e419]:
+                      - img [ref=e420]
+                      - text: 60.2万
+                      - img [ref=e421]
+                      - text: "16"
+              - link "骑士&魔法 骑士&魔法 全13话 1亿 116.6万" [ref=e423] [cursor=pointer]:
+                - /url: /bangumi/play/ss6304/
+                - img "骑士&魔法" [ref=e426]
+                - generic [ref=e427]:
+                  - generic "骑士&魔法" [ref=e428]
+                  - generic [ref=e430]:
+                    - generic [ref=e431]: 全13话
+                    - generic [ref=e432]:
+                      - img [ref=e433]
+                      - text: 1亿
+                      - img [ref=e434]
+                      - text: 116.6万
+              - link "贤者之孙 贤者之孙 全12话 9863.5万 105万" [ref=e436] [cursor=pointer]:
+                - /url: /bangumi/play/ss26794/
+                - img "贤者之孙" [ref=e439]
+                - generic [ref=e440]:
+                  - generic "贤者之孙" [ref=e441]
+                  - generic [ref=e443]:
+                    - generic [ref=e444]: 全12话
+                    - generic [ref=e445]:
+                      - img [ref=e446]
+                      - text: 9863.5万
+                      - img [ref=e447]
+                      - text: 105万
+              - link "食戟之灵 餐之皿 食戟之灵 餐之皿 全24话 3931.8万 22.5万" [ref=e449] [cursor=pointer]:
+                - /url: /bangumi/play/ss6419/
+                - img "食戟之灵 餐之皿" [ref=e452]
+                - generic [ref=e453]:
+                  - generic "食戟之灵 餐之皿" [ref=e454]
+                  - generic [ref=e456]:
+                    - generic [ref=e457]: 全24话
+                    - generic [ref=e458]:
+                      - img [ref=e459]
+                      - text: 3931.8万
+                      - img [ref=e460]
+                      - text: 22.5万
+              - link "辉夜大小姐想让我告白？～天才们的恋爱头脑战～ 辉夜大小姐想让我告白？～天才们的恋爱头脑战～ 全12话 2.5亿 389.8万" [ref=e462] [cursor=pointer]:
+                - /url: /bangumi/play/ss32982/
+                - img "辉夜大小姐想让我告白？～天才们的恋爱头脑战～" [ref=e465]
+                - generic [ref=e466]:
+                  - generic "辉夜大小姐想让我告白？～天才们的恋爱头脑战～" [ref=e467]
+                  - generic [ref=e469]:
+                    - generic [ref=e470]: 全12话
+                    - generic [ref=e471]:
+                      - img [ref=e472]
+                      - text: 2.5亿
+                      - img [ref=e473]
+                      - text: 389.8万
+              - link "野生的大魔王出现了！ 野生的大魔王出现了！ 全12话 1488.3万 4.5万" [ref=e475] [cursor=pointer]:
+                - /url: /bangumi/play/ss112978/
+                - img "野生的大魔王出现了！" [ref=e478]
+                - generic [ref=e479]:
+                  - generic "野生的大魔王出现了！" [ref=e480]
+                  - generic [ref=e482]:
+                    - generic [ref=e483]: 全12话
+                    - generic [ref=e484]:
+                      - img [ref=e485]
+                      - text: 1488.3万
+                      - img [ref=e486]
+                      - text: 4.5万
+      - img
+  - alert [ref=e487]
+  - status

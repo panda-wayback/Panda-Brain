@@ -1,7 +1,9 @@
-pydantic-ai>=1.56.0
+pydantic-ai[mcp]>=1.56.0
 pydantic-settings>=2.12.0
+pyyaml>=6.0
 httpx>=0.28.1
 aiohttp>=3.9.0
 bilibili-api-python>=17.0.0
 lancedb>=0.14.0
 sentence-transformers>=3.0.0
+playwright>=1.40

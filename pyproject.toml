@@ -4,11 +4,12 @@ version = "0.1.0"
 description = "Multi-agent AI system powered by Pydantic AI and Ollama"
 requires-python = ">=3.11"
 dependencies = [
-    "pydantic-ai",
+    "pydantic-ai[mcp]",
     "pydantic-settings",
     "pyyaml>=6.0",
     "lancedb>=0.14.0",
     "sentence-transformers>=3.0.0",
+    "playwright>=1.40",
 ]
 
 [project.scripts]

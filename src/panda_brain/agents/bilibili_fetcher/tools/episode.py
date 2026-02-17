@@ -67,6 +67,7 @@ async def _store_ssid_episodes(deps: Deps, ssid: int, season_label: str) -> tupl
         text = f"{season_label} {section_title or '正片'} 第{i}集 {title}"
         extra = json.dumps(
             {
+                "source_site": "bilibili",
                 "ssid": ssid,
                 "season_label": season_label,
                 "section_title": section_title,

@@ -22,8 +22,11 @@ from panda_brain.deps import Deps
 
 
 def _extra_per_sec(time_sec: int, danmaku_count: int) -> str:
-    """按秒存储的 extra：time_sec + 该秒弹幕数量。"""
-    return json.dumps({"time_sec": time_sec, "danmaku_count": danmaku_count}, ensure_ascii=False)
+    """按秒存储的 extra：来源站点 + time_sec + 该秒弹幕数量。"""
+    return json.dumps(
+        {"source_site": "bilibili", "time_sec": time_sec, "danmaku_count": danmaku_count},
+        ensure_ascii=False,
+    )
 
 
 async def _summarize_second_with_llm(merged_text: str, timeout: int = 15) -> str:
