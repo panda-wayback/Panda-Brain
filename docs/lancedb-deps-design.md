@@ -12,7 +12,7 @@
 
 ### Storage agent 在哪里？
 
-- **Storage agent 还是一个普通的子 agent**，和 bilibili_fetcher、coder、network 一样，在 `agents/storage/` 里。
+- **Storage agent 还是一个普通的子 agent**，和 bilibili_fetcher、browser_mcp 一样，在 `agents/storage/` 里。
 - **它不在 deps 里**。deps 里只有「LanceDB 服务实例」（能力），没有「某个 agent」。
 - 关系是：
   - **deps** = 装着「LanceDB 能力」的袋子，每次跑任何 agent 时都会传进去（`run(..., deps=deps)`）。
@@ -38,7 +38,7 @@
 | 东西 | 放在哪 | 谁用、怎么用 |
 |------|--------|----------------|
 | **LanceDB 服务**（search / add_documents / list_tables） | **deps 里**，例如 `Deps(lancedb=LanceDBService())` | 任何 agent 在工具里写 `ctx.deps.lancedb.xxx(...)` 就能用 |
-| **Storage agent** | **agents/storage/**，和 bilibili_fetcher/coder 同级 | 一个「存/取专家」子 agent；被 orchestrator 委托时，拿到的也是同一份 `ctx.deps`，工具内部调 `ctx.deps.lancedb` |
+| **Storage agent** | **agents/storage/**，和 bilibili_fetcher/browser_mcp 同级 | 一个「存/取专家」子 agent；被 orchestrator 委托时，拿到的也是同一份 `ctx.deps`，工具内部调 `ctx.deps.lancedb` |
 | **Orchestrator 的存/取工具**（若采用方案乙） | **orchestrator/tools.py** | 编排器自己的工具，内部 `ctx.deps.lancedb.xxx`，用户说存/查时由编排器直接执行，不经过 storage agent |
 
 ---
@@ -79,7 +79,7 @@ orchestrator (deps_type=Deps)
   ├─ 委托时：xxx_agent.run(task, deps=ctx.deps, usage=ctx.usage)  # 把同一 deps 传下去
   └─ 子 agent 若有「查库」需求，其工具同样用 ctx.deps.lancedb.xxx
 
-子 agent（coder / bilibili_fetcher / network / storage 等）
+子 agent（bilibili_fetcher / browser_mcp / storage 等）
   └─ 统一 deps_type=Deps（与 orchestrator 一致）
   └─ 需要查库的工具：@agent.tool，ctx: RunContext[Deps]，内部 ctx.deps.lancedb.search(...)
   └─ 不需要查库的工具：可继续用 @agent.tool_plain，或 @agent.tool 但不使用 ctx.deps
@@ -137,5 +137,5 @@ orchestrator (deps_type=Deps)
 - **`panda_brain.deps`**：`Deps`（含 `lancedb: LanceDBService`）、`LanceDBService`、`create_deps()`。
 - **入口**：`main.py` 中 `deps = create_deps()`，`orchestrator.run(..., deps=deps)`。
 - **Orchestrator**：`deps_type=Deps`；提供 `lancedb_add`、`lancedb_search`、`lancedb_list_tables` 三个工具（内部 `ctx.deps.lancedb.*`）；委托时 `xxx_agent.run(task, deps=ctx.deps, usage=ctx.usage)`。
-- **子 agent**（coder、network、bilibili_fetcher）：均声明 `deps_type=Deps`，委托时传入同一 `ctx.deps`；后续若某 agent 需要在自己的工具里查库，可写 `@agent.tool` + `ctx.deps.lancedb.search(...)` 等。
+- **子 agent**（bilibili_fetcher、browser_mcp 等）：均声明 `deps_type=Deps`，委托时传入同一 `ctx.deps`；后续若某 agent 需要在自己的工具里查库，可写 `@agent.tool` + `ctx.deps.lancedb.search(...)` 等。
 - **Storage agent**：已移除，存/取由编排器上述三工具完成。

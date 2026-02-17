@@ -7,12 +7,12 @@
 ```
 orchestrator (编排器)
 ├── 直接回答一般性问题
-└── delegate_to_coder ──→ coder_agent (代码专家)
-                              └── run_shell_command (执行本地命令)
+├── delegate_to_bilibili_fetcher ──→ bilibili_fetcher_agent (B 站抓取)
+├── delegate_to_browser_mcp ──→ browser_mcp_agent (浏览器 MCP)
+└── lancedb_* 工具（存/查向量库）
 ```
 
 - **Orchestrator** — 入口 agent，理解用户意图，路由到对应的专家 agent 或直接回答
-- **Coder Agent** — 编程专家，具备本地 shell 命令执行能力
 
 扩展新 agent 只需在 `agents/` 下新建包，然后在 `orchestrator/tools.py` 中添加对应的委托工具。
 
@@ -57,9 +57,8 @@ src/panda_brain/
 │   ├── agent.py                # orchestrator 定义
 │   └── tools.py                # 委托工具 (路由到子 agent)
 ├── agents/                     # 子 agent (被 orchestrator 调用)
-│   └── coder/                  # 代码专家 agent
-│       ├── agent.py            # agent 定义
-│       └── tools.py            # shell 执行等工具
+│   ├── bilibili_fetcher/       # B 站抓取 agent
+│   └── browser_mcp/            # 浏览器 MCP agent
 └── main.py                     # CLI 入口
 ```
 

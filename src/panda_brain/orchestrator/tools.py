@@ -2,8 +2,6 @@ from pydantic_ai import RunContext
 
 from panda_brain.agents.bilibili_fetcher import bilibili_fetcher_agent
 from panda_brain.agents.browser_mcp import browser_mcp_agent
-from panda_brain.agents.coder import coder_agent
-from panda_brain.agents.network import network_agent
 from panda_brain.deps import Deps
 from panda_brain.orchestrator.agent import orchestrator
 
@@ -70,20 +68,6 @@ async def lancedb_list_tables(ctx: RunContext[Deps]) -> str:
         return "当前表: " + ", ".join(names)
     except Exception as e:
         return f"列表失败: {e}"
-
-
-@orchestrator.tool
-async def delegate_to_coder(ctx: RunContext[Deps], task: str) -> str:
-    """将编程、代码生成、代码分析、Shell 命令等技术任务委托给代码专家 Agent。"""
-    result = await coder_agent.run(task, deps=ctx.deps, usage=ctx.usage)
-    return result.output
-
-
-@orchestrator.tool
-async def delegate_to_network(ctx: RunContext[Deps], task: str) -> str:
-    """将网络信息查询任务（如查看 IP 地址）委托给网络诊断专家 Agent。"""
-    result = await network_agent.run(task, deps=ctx.deps, usage=ctx.usage)
-    return result.output
 
 
 @orchestrator.tool

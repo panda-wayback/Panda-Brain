@@ -17,8 +17,8 @@ src/panda_brain/
 │   ├── agent.py             # orchestrator 定义（deps_type=Deps）
 │   └── tools.py             # 委托工具 + lancedb_add / lancedb_search / lancedb_list_tables
 ├── agents/                  # 所有被编排的子 agent（均 deps_type=Deps）
-│   ├── coder/
-│   └── network/
+│   ├── bilibili_fetcher/
+│   └── browser_mcp/
 └── main.py                  # CLI 入口（create_deps() 后 run(..., deps=deps)）
 ```
 
@@ -89,9 +89,9 @@ async def delegate_to_xxx(ctx: RunContext[Deps], task: str) -> str:
 
 ### 命名
 
-- agent 包名：小写，用途描述，如 `coder`、`network`、`writer`
-- agent 变量名：`{name}_agent`，如 `coder_agent`
-- 委托函数名：`delegate_to_{name}`，如 `delegate_to_coder`
+- agent 包名：小写，用途描述，如 `bilibili_fetcher`、`browser_mcp`
+- agent 变量名：`{name}_agent`，如 `bilibili_fetcher_agent`
+- 委托函数名：`delegate_to_{name}`，如 `delegate_to_bilibili_fetcher`
 
 ### 模型
 
