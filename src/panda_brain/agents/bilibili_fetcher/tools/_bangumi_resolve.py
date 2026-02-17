@@ -152,4 +152,4 @@ async def resolve_bangumi_to_bvid(
                 return bvid, play_url, desc
         except Exception:
             continue
-    return None, "", f"未找到「{keyword}」第{season}季第{episode}集对应的 bvid，请确认季/集或改用 search_bangumi 查看全部结果。"
+    return None, "", f"未找到「{keyword}」第{season}季第{episode}集对应的 bvid，请确认季/集或先调用 fetch_and_store_bangumi_play_links 抓取全部链接入库后再查。"

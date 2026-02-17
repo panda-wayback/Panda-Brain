@@ -18,19 +18,19 @@ class TestBilibiliFetcherAgentConfig(unittest.TestCase):
 
 
 class TestBilibiliFetcherAgentRun(unittest.TestCase):
-    """Agent 一次对话：问骨王第一季第一集 bvid，应通过 resolve 得到 BV。"""
+    """Agent 一次对话：要单集链接时通过 get_play_url 返回播放链接。"""
 
-    def test_run_resolve_bvid(self):
+    def test_run_single_ep_link(self):
         async def _run():
             deps = create_deps()
             result = await bilibili_fetcher_agent.run(
-                "骨王第一季第一集的 bvid 是什么？请只调用 resolve_bangumi_to_bvid 得到后直接回复 bvid。",
+                "骨王第一季第一集的播放链接是什么？请只调用 get_play_url 得到后直接回复播放链接。",
                 deps=deps,
             )
             return result.output
 
         output = asyncio.run(_run())
-        self.assertIn("BV", output, "回复中应包含 bvid（BV 开头）")
+        self.assertIn("bilibili.com/bangumi/play/ep", output, "回复中应包含番剧单集播放链接")
 
     def test_fetch_bangumi_play_links_full_list(self):
         """提番剧名「骨王」时，fetch_bangumi_play_links 直接返回完整列表（第一季/第二季/第三季、剧场版、BVID 与链接）。"""
