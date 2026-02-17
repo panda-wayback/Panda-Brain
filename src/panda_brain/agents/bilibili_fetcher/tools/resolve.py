@@ -10,15 +10,14 @@ from panda_brain.agents.bilibili_fetcher.tools._common import TABLE_EPISODES
 from panda_brain.deps import Deps
 
 
-@bilibili_fetcher_agent.tool
-async def get_play_url(ctx: RunContext[Deps], keyword: str, season: int = 1, episode: int = 1) -> str:
-    """根据番剧名与「第几季第几集」返回该集 B 站播放链接。先查 bilibili_episodes 表，命中则直接返回；未命中再实时解析。用户要「某集链接」时请调用本工具并从返回中取出「播放链接:」后的 URL 回复。"""
+async def get_play_url_impl(deps: Deps, keyword: str, season: int = 1, episode: int = 1) -> str:
+    """根据番剧名与「第几季第几集」返回该集 B 站播放链接。先查 bilibili_episodes 表，命中则直接返回；未命中再实时解析。返回格式含「播放链接: URL」。供 bilibili_fetcher 工具与 browser_mcp 直接调用，避免多一层 agent.run。"""
     keyword = (keyword or "").strip()
     if not keyword or season < 1 or episode < 1:
         return "请提供番剧名且 season、episode 均 >= 1。"
     try:
         query = f"{keyword} 第{episode}集"
-        rows = ctx.deps.lancedb.search(TABLE_EPISODES, query, limit=10)
+        rows = deps.lancedb.search(TABLE_EPISODES, query, limit=10)
         for r in rows:
             extra = r.get("extra")
             if not extra:
@@ -39,6 +38,12 @@ async def get_play_url(ctx: RunContext[Deps], keyword: str, season: int = 1, epi
     if bvid is None:
         return desc
     return f"播放链接: {play_url}\n（{desc}）" if play_url else desc
+
+
+@bilibili_fetcher_agent.tool
+async def get_play_url(ctx: RunContext[Deps], keyword: str, season: int = 1, episode: int = 1) -> str:
+    """根据番剧名与「第几季第几集」返回该集 B 站播放链接。先查 bilibili_episodes 表，命中则直接返回；未命中再实时解析。用户要「某集链接」时请调用本工具并从返回中取出「播放链接:」后的 URL 回复。"""
+    return await get_play_url_impl(ctx.deps, keyword, season=season, episode=episode)
 
 
 @bilibili_fetcher_agent.tool_plain

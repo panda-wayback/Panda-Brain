@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     lancedb_path: str = ".panda_brain/lancedb"
     # 向量化模型（sentence-transformers 模型名）
     lancedb_embedding_model: str = "BAAI/bge-small-en-v1.5"
+    # browser_mcp 使用的浏览器 profile 目录；不同值可同时跑多实例
+    browser_mcp_user_data_dir: str = ""
 
 
 settings = Settings()

@@ -2,9 +2,10 @@
 
 - 拉取：get_danmakus(from_seg=0, to_seg=None)，库内按 segment 拉整集。
 - 存储：按秒聚合，每秒一行。每行含该秒弹幕数量(danmaku_count)、该秒弹幕的语义聚合文本；
-  可选用 LLM 对该秒弹幕做一句话概括，减少冗余。
+  可选用 LLM 对该秒弹幕做一句话概括，减少冗余。LLM 概括时使用并发+信号量限流，避免串行阻塞。
 """
 
+import asyncio
 import json
 from collections import defaultdict
 
@@ -19,6 +20,9 @@ from panda_brain.agents.bilibili_fetcher.tools._common import (
 )
 from panda_brain.config import settings
 from panda_brain.deps import Deps
+
+# 弹幕 LLM 概括时的最大并发数，避免压垮本地 Ollama
+MAX_CONCURRENT_DANMAKU_LLM = 5
 
 
 def _extra_per_sec(time_sec: int, danmaku_count: int) -> str:
@@ -63,7 +67,7 @@ async def fetch_danmaku_and_store(
 
     - 存储：每秒一行；text 为该秒弹幕合并文本（或 LLM 一句话概括），extra 含 time_sec、danmaku_count。
     - limit：参与聚合的弹幕总条数上限，0 表示不截断。
-    - summarize_with_llm：是否用 Ollama 对该秒弹幕做一句话概括（语义聚合）；否则仅合并文本。"""
+    - summarize_with_llm：是否用 Ollama 对该秒弹幕做一句话概括（语义聚合）；启用时并发调用并限流，避免串行阻塞。"""
     if deps.lancedb.table_has_source(TABLE_DANMAKU, bvid):
         return 0, "已存在，跳过"
     try:
@@ -84,21 +88,46 @@ async def fetch_danmaku_and_store(
         if not by_sec:
             return 0, "无有效弹幕"
 
-        # 每秒一行：合并该秒弹幕（或 LLM 概括），extra 带 time_sec、danmaku_count
-        items = []
-        for time_sec in sorted(by_sec.keys()):
-            texts = by_sec[time_sec]
-            count = len(texts)
-            merged = " ".join(texts)[:DANMAKU_MERGE_PER_SEC_MAX]
-            if summarize_with_llm and merged:
-                merged = await _summarize_second_with_llm(merged)
-            if not merged:
-                merged = f"（{count} 条弹幕）"
-            items.append({
-                "text": merged,
-                "source": bvid,
-                "extra": _extra_per_sec(time_sec, count),
-            })
+        sorted_secs = sorted(by_sec.keys())
+        if summarize_with_llm:
+            sem = asyncio.Semaphore(MAX_CONCURRENT_DANMAKU_LLM)
+
+            async def summarize_one(time_sec: int) -> tuple[int, str]:
+                texts = by_sec[time_sec]
+                count = len(texts)
+                merged = " ".join(texts)[:DANMAKU_MERGE_PER_SEC_MAX]
+                if merged:
+                    async with sem:
+                        merged = await _summarize_second_with_llm(merged)
+                if not merged:
+                    merged = f"（{count} 条弹幕）"
+                return time_sec, merged, count
+
+            results = await asyncio.gather(
+                *[summarize_one(sec) for sec in sorted_secs],
+                return_exceptions=False,
+            )
+            items = [
+                {
+                    "text": merged,
+                    "source": bvid,
+                    "extra": _extra_per_sec(time_sec, count),
+                }
+                for time_sec, merged, count in results
+            ]
+        else:
+            items = []
+            for time_sec in sorted_secs:
+                texts = by_sec[time_sec]
+                count = len(texts)
+                merged = " ".join(texts)[:DANMAKU_MERGE_PER_SEC_MAX]
+                if not merged:
+                    merged = f"（{count} 条弹幕）"
+                items.append({
+                    "text": merged,
+                    "source": bvid,
+                    "extra": _extra_per_sec(time_sec, count),
+                })
 
         n = deps.lancedb.add_documents(TABLE_DANMAKU, items)
         return n, f"已按秒聚合写入 {n} 条（共 {sum(len(by_sec[s]) for s in by_sec)} 条原始弹幕）"

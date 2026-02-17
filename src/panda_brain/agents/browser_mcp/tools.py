@@ -1,14 +1,14 @@
-"""browser_mcp 工具：向 bilibili_fetcher 获取播放链接，供 MCP 的 browser_navigate 使用。"""
+"""browser_mcp 工具：直接调用 bilibili_fetcher 的解析逻辑获取播放链接，供 MCP 的 browser_navigate 使用。不经过 fetcher agent.run，减少一轮 LLM。"""
 
 import re
 
 from pydantic_ai import RunContext
 
-from panda_brain.agents.bilibili_fetcher import bilibili_fetcher_agent
+from panda_brain.agents.bilibili_fetcher.tools.resolve import get_play_url_impl
 from panda_brain.agents.browser_mcp.agent import browser_mcp_agent
 from panda_brain.deps import Deps
 
-# 用于从 fetcher 回复中提取纯 URL（ep 链接或 bilibili 播放页）
+# 用于从返回中提取纯 URL（ep 链接或 bilibili 播放页）
 _URL_PATTERN = re.compile(r"https?://[^\s\u4e00-\u9fff]+", re.IGNORECASE)
 _PLAY_LINK_PREFIX = "播放链接:"
 
@@ -20,14 +20,12 @@ async def get_play_url_from_fetcher(
     season: int = 1,
     episode: int = 1,
 ) -> str:
-    """向 bilibili_fetcher 请求该集 B 站播放链接（fetcher 会先查库再解析）。返回格式：第一行是纯 URL 用于 browser_navigate，第二行是说明。"""
+    """根据番剧名与季/集获取该集 B 站播放链接（先查库再解析，不经过 fetcher LLM）。返回格式：第一行是纯 URL 用于 browser_navigate，第二行是说明。"""
     keyword = (keyword or "").strip()
     if not keyword:
         return "请提供番剧名或关键词。"
-    task = f"请返回「{keyword}」第{season}季第{episode}集的 B 站播放链接，仅第一行输出纯 URL，不要其他文字。"
-    result = await bilibili_fetcher_agent.run(task, deps=ctx.deps, usage=ctx.usage)
-    text = (result.output or "").strip()
-    # 先尝试「播放链接: URL」格式
+    text = await get_play_url_impl(ctx.deps, keyword, season=season, episode=episode)
+    text = (text or "").strip()
     if _PLAY_LINK_PREFIX in text:
         idx = text.find(_PLAY_LINK_PREFIX)
         rest = text[idx + len(_PLAY_LINK_PREFIX) :].strip()
