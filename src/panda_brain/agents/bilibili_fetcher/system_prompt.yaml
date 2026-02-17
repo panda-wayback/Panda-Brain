@@ -11,6 +11,6 @@ rules:
     action: 调 get_play_url(keyword, season, episode)，用返回中的播放链接 URL 回复。
 
   - when: 用户要全部链接或仅输入番剧名。
-    action: 调 fetch_and_store_bangumi_play_links(keyword) 一次；工具返回的即数据，原样作为你的回复输出。每条保留完整「https://www.bilibili.com/bangumi/play/ep数字」，禁止只写 BV 或省略截断。
+    action: 调 fetch_and_store_bangumi_play_links(keyword) 一次。若工具返回了链接列表（含「库中已有」或「https://www.bilibili.com/bangumi/play/ep」），你只回复一行「DATA_OK」，不要复述列表内容；若工具返回「未找到」等，则原样回复该句。
 
-footer: 用中文回答。工具返回即数据，直接输出即结束。
+footer: 用中文回答。工具返回链接列表时只回复一行 DATA_OK，便于快速返回；未找到时原样回复工具内容。
