@@ -1,5 +1,7 @@
 """全部链接。设计：先保证库里有该番（没有就全量拉取）→ 从库拿 → 返回。逻辑在 utils。"""
 
+import logging
+
 from pydantic_ai import RunContext
 
 from panda_brain.agents.bilibili_fetcher.agent import bilibili_fetcher_agent
@@ -10,14 +12,19 @@ from panda_brain.agents.bilibili_fetcher.utils import (
 )
 from panda_brain.deps import Deps
 
+logger = logging.getLogger(__name__)
+
 
 async def fetch_bangumi_play_links(deps: Deps, keyword: str) -> str:
     keyword = (keyword or "").strip()
     if not keyword:
         return "请提供番剧名。"
+    logger.info("[获取链接] 工具入参 keyword=%r", keyword)
     await ensure_anime_in_db(deps, keyword)
     out = get_all_from_db(deps, keyword)
-    return out or "未找到该番剧相关链接。"
+    result = out or "未找到该番剧相关链接。"
+    logger.info("[获取链接] 工具返回: %d 字符, %d 行", len(result), result.count("\n") + 1)
+    return result
 
 
 @bilibili_fetcher_agent.tool

@@ -87,11 +87,11 @@ class TestGetSinglePlayLink(unittest.TestCase):
         self.assertTrue(ok, f"LLM 判断回复不符合预期: {reason}")
 
     def test_single_ep_another_anime(self):
-        """另一番剧单集：凡人修仙传第1集"""
+        """另一单集：骨王第二季第一集（凡人修仙传第1集在 B 站多为预告 PV，易判不符合预期，故改用骨王第二季）"""
         async def _run():
             deps = create_deps()
             result = await bilibili_fetcher_agent.run(
-                "凡人修仙传第一集播放链接",
+                "骨王第二季第一集的播放链接",
                 deps=deps,
             )
             return result.output
@@ -102,10 +102,10 @@ class TestGetSinglePlayLink(unittest.TestCase):
             if e.status_code == 502:
                 self.skipTest(SKIP_502_MSG)
             raise
-        print("\n--- 用户请求：凡人修仙传第一集播放链接 ---\n助手回复：\n", output, "\n---")
+        print("\n--- 用户请求：骨王第二季第一集播放链接 ---\n助手回复：\n", output, "\n---")
         self.assertTrue(output, "回复不应为空")
         try:
-            ok, reason = asyncio.run(_llm_judge_reply("凡人修仙传第一集播放链接", output, "single"))
+            ok, reason = asyncio.run(_llm_judge_reply("骨王第二季第一集的播放链接", output, "single"))
         except ModelHTTPError as e:
             if e.status_code == 502:
                 self.skipTest(SKIP_502_MSG)
