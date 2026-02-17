@@ -30,5 +30,5 @@ async def fetch_bangumi_play_links(deps: Deps, keyword: str) -> str:
 @bilibili_fetcher_agent.tool
 @log_timing("fetch_and_store_bangumi_play_links")
 async def fetch_and_store_bangumi_play_links(ctx: RunContext[Deps], keyword: str) -> str:
-    """根据番剧名抓取该番全部季的各集播放链接并写入 LanceDB。先保证向量库有该番数据（没有则全量拉取），再从库返回。用户要「全部链接」「链接列表」时调用此工具。"""
+    """按番剧名拿该番全部播放链接（先保证库里有数据再返回）。返回即数据，直接给用户即可。"""
     return await fetch_bangumi_play_links(ctx.deps, keyword)
