@@ -1,4 +1,5 @@
-"""LanceDB 向量存储：连接、建表、写入、语义检索。供各 agent 或工具直接调用。"""
+"""LanceDB 向量存储基础实现：连接、建表、写入、语义检索、按 source 查重。
+供 Deps.lancedb 或其它公共工具调用，各智能体只依赖「表名 + 文档格式」不关心本实现。"""
 
 from __future__ import annotations
 
@@ -10,14 +11,13 @@ from lancedb.pydantic import LanceModel, Vector
 
 from panda_brain.config import settings
 
-# 单例连接与 embedding 模型，懒加载
 _db: lancedb.DBConnection | None = None
 _embedding_model: Any = None
 _DocumentSchema: type[LanceModel] | None = None
 
 
 def get_db() -> lancedb.DBConnection:
-    """获取 LanceDB 连接（单例）。"""
+    """获取 LanceDB 连接（单例，使用 settings.lancedb_path）。"""
     global _db
     if _db is None:
         _db = lancedb.connect(settings.lancedb_path)
@@ -25,7 +25,7 @@ def get_db() -> lancedb.DBConnection:
 
 
 def _get_embedding_model():
-    """懒加载 sentence-transformers embedding 模型。"""
+    """懒加载 sentence-transformers embedding 模型（settings.lancedb_embedding_model）。"""
     global _embedding_model
     if _embedding_model is None:
         _embedding_model = get_registry().get("sentence-transformers").create(
@@ -35,7 +35,7 @@ def _get_embedding_model():
 
 
 def _get_document_schema() -> type[LanceModel]:
-    """返回用于「文本 + 向量 + 可选元数据」的 LanceModel  schema（与当前 embedding 维度一致）。"""
+    """返回默认文档 schema：text + vector + 可选 source、extra。"""
     global _DocumentSchema
     if _DocumentSchema is None:
         model = _get_embedding_model()
@@ -51,23 +51,15 @@ def _get_document_schema() -> type[LanceModel]:
 
 
 def ensure_table(table_name: str):
-    """若表不存在则用默认 schema 创建，存在则直接打开。返回表对象。"""
+    """表不存在则用默认 schema 创建，存在则打开。返回表对象。"""
     db = get_db()
-    names = db.list_tables()
-    if table_name in names:
+    if table_name in db.list_tables():
         return db.open_table(table_name)
-    schema = _get_document_schema()
-    return db.create_table(table_name, schema=schema, exist_ok=True)
+    return db.create_table(table_name, schema=_get_document_schema(), exist_ok=True)
 
 
-def add_documents(
-    table_name: str,
-    items: list[dict[str, Any]],
-) -> int:
-    """
-    向指定表写入若干条文档。每条需含 "text"，可选 "source"、"extra"。
-    自动做向量化并写入，返回写入条数。
-    """
+def add_documents(table_name: str, items: list[dict[str, Any]]) -> int:
+    """向指定表写入文档。每条需含 "text"，可选 "source"、"extra"。自动向量化，返回写入条数。"""
     if not items:
         return 0
     table = ensure_table(table_name)
@@ -84,15 +76,8 @@ def add_documents(
     return len(rows)
 
 
-def search(
-    table_name: str,
-    query_text: str,
-    limit: int = 10,
-) -> list[dict[str, Any]]:
-    """
-    在指定表中做语义检索。query_text 会被表关联的 embedding 自动向量化后检索。
-    返回列表，每项为包含 text、source、extra 及 _distance 的字典。
-    """
+def search(table_name: str, query_text: str, limit: int = 10) -> list[dict[str, Any]]:
+    """在指定表中语义检索。返回含 text、source、extra、_distance 的字典列表。"""
     table = ensure_table(table_name)
     results = table.search(query_text).limit(limit).to_list()
     return [dict(r) for r in results]
@@ -104,7 +89,7 @@ def list_tables() -> list[str]:
 
 
 def table_has_source(table_name: str, source: str) -> bool:
-    """当前库中该表是否已有至少一条 source 等于给定值的行（表不存在视为无）。"""
+    """该表是否已有 source 等于给定值的行；表不存在视为无。"""
     db = get_db()
     if table_name not in db.list_tables():
         return False

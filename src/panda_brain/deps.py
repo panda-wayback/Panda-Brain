@@ -3,14 +3,16 @@
 from dataclasses import dataclass
 from typing import Any
 
-from panda_brain.storage import add_documents as _add_documents
-from panda_brain.storage import list_tables as _list_tables
-from panda_brain.storage import search as _search
-from panda_brain.storage import table_has_source as _table_has_source
+from panda_brain.lancedb import (
+    add_documents as _add_documents,
+    list_tables as _list_tables,
+    search as _search,
+    table_has_source as _table_has_source,
+)
 
 
 class LanceDBService:
-    """LanceDB 向量库服务：供各 agent 通过 ctx.deps.lancedb 调用。"""
+    """LanceDB 向量库服务：委托给 panda_brain.lancedb 公共模块，供各 agent 通过 ctx.deps.lancedb 调用。"""
 
     def add_documents(
         self,

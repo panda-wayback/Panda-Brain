@@ -9,7 +9,7 @@ sys.path.insert(0, "src")
 from bilibili_api import bangumi, search
 from bilibili_api.search import SearchObjectType
 
-from panda_brain.agents.bilibili_fetcher.tools._common import get_credential
+from panda_brain.agents.bilibili_fetcher.utils import get_credential
 
 
 async def main():

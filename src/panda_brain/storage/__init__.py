@@ -1,6 +1,6 @@
-"""存储相关：LanceDB 向量库等。"""
+"""兼容层：LanceDB 实现已迁至 panda_brain.lancedb，此处仅再导出。"""
 
-from panda_brain.storage.lancedb_store import (
+from panda_brain.lancedb import (
     add_documents,
     ensure_table,
     get_db,
