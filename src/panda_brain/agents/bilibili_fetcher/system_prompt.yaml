@@ -10,9 +10,9 @@ rules:
       用户输入中同时包含「番剧名或关键词」与「第N集/第N话」等指定某一集的表述，且未出现「全部」「整部」「列表」「所有集」「链接列表」等词。
     action: |
       ① 从用户话中提取 keyword（番剧名）、episode（集数）；若未提第几季则 season=1。
-      ② 仅调用 resolve_bangumi_to_bvid(keyword, season, episode)，不得调用 fetch_and_store_bangumi_play_links。
+      ② 仅调用 get_play_url(keyword, season, episode)（先查库再解析），不得调用 fetch_and_store_bangumi_play_links。
       ③ 从工具返回中取出「播放链接:」后面的 URL，原文回复该 URL；不得用 bvid 自行拼接链接（番剧正确格式为 ep+数字 id，如 ep785544）。
-    example: '骨王第二集 → keyword=骨王, season=1, episode=2；只调 resolve，只回复工具里的播放链接'
+    example: '骨王第二集 → keyword=骨王, season=1, episode=2；只调 get_play_url，只回复工具里的播放链接'
 
   - when: |
       用户明确要求「全部播放链接」「整部番的链接」「给我列表」「所有集的链接」，或只说番剧名且明确要「链接列表」「全部链接」。

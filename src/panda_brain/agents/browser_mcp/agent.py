@@ -11,7 +11,7 @@ from panda_brain.utils.prompt_loader import load_system_prompt
 
 _YAML_PATH = Path(__file__).resolve().parent / "system_prompt.yaml"
 _DEFAULT_PROMPT = (
-    "你是 B 站番剧播放助手。先 get_bangumi_play_url 拿链接，取返回第一行用 browser_navigate 打开；"
+    "你是 B 站番剧播放助手。通过 get_play_url_from_fetcher 向 bilibili_fetcher 拿链接，取返回第一行用 browser_navigate 打开；"
     "「第N分钟」用 browser_evaluate 设 video.currentTime。始终用中文回答。"
 )
 
